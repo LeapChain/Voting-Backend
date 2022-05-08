@@ -1,4 +1,8 @@
 const Poll = require("../models/Poll");
+const User = require("../models/User");
+const generateNonce = require("../utils/generateNonce");
+const { Account } = require("@commandokoala/thenewboston");
+const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS } = require("../constants");
 
 const getAllPoll = async (req, res) => {
   try {
@@ -21,8 +25,53 @@ const getPoll = async (req, res) => {
 
 const createPoll = async (req, res) => {
   try {
-    const poll = await Poll.create(req.body);
-    return res.json(poll);
+    const { accountNumber, signature } = req.body;
+
+    if (WHITELISTEAD_POLL_ACCOUNT_NUMBERS.includes(accountNumber)) {
+      const sortedChoices = req.body.choices.sort((a, b) =>
+        a.title > b.title ? 1 : -1
+      );
+
+      const user = await User.findOne({ accountNumber });
+
+      if (!user) {
+        return res.json({
+          error:
+            "User validation failed: User associated with `accountNumber` does not exist..",
+        });
+      }
+
+      const message = {
+        title: req.body.title,
+        description: req.body.description,
+        url: req.body.url,
+        nonce: user.nonce,
+        choices: sortedChoices,
+      };
+
+      const stringifiedMessage = JSON.stringify(message);
+
+      const isValidSignature = Account.verifySignature(
+        stringifiedMessage,
+        signature,
+        accountNumber
+      );
+
+      if (isValidSignature) {
+        const poll = await Poll.create(req.body);
+        user.nonce = generateNonce();
+        await user.save();
+        return res.json(poll);
+      } else {
+        return res.json({
+          error: "Invalid Signature..",
+        });
+      }
+    } else {
+      return res.json({
+        error: "accountNumber is not in the whiltelist..",
+      });
+    }
   } catch (err) {
     return res.json(err);
   }
