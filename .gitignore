@@ -131,3 +131,6 @@ dist
 
 # IDEA FOLDERS
 .idea/*
+
+# DETA FOLDERS
+.deta/*

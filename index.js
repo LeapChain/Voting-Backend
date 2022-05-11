@@ -1,14 +1,14 @@
 require("dotenv").config();
-require("./db/connect");
+require("./src/db/connect");
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
 
-const pollRouter = require("./routes/poll");
-const userRouter = require("./routes/user");
-const authUserRouter = require("./routes/auth");
-const voteRouter = require("./routes/vote");
+const pollRouter = require("./src/routes/poll");
+const userRouter = require("./src/routes/user");
+const authUserRouter = require("./src/routes/auth");
+const voteRouter = require("./src/routes/vote");
 
 app.use(cors());
 app.use(morgan("tiny"));
