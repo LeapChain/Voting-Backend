@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 
+const PollStatus = {
+  IN_PROGRESS: 0,
+  COMPLETED: 1,
+  CANCELLED: 2,
+};
+
 const PollChoiceSchema = mongoose.Schema({
   title: {
     type: String,
@@ -37,9 +43,9 @@ const PollSchema = mongoose.Schema(
     },
     url: String,
     status: {
-      type: String,
-      enum: ["IN_PROGRESS", "COMPLETED", "CANCELLED"],
-      default: "IN_PROGRESS",
+      type: Number,
+      enum: PollStatus,
+      default: 0,
     },
     choices: [
       {
