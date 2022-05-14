@@ -36,6 +36,11 @@ const PollSchema = mongoose.Schema(
       maxLength: 264,
     },
     url: String,
+    status: {
+      type: String,
+      enum: ["IN_PROGRESS", "COMPLETED", "CANCELLED"],
+      default: "IN_PROGRESS",
+    },
     choices: [
       {
         type: PollChoiceSchema,
