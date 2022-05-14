@@ -1,5 +1,6 @@
 const Poll = require("../models/Poll");
 const User = require("../models/User");
+const Vote = require("../models/Vote");
 const generateNonce = require("../utils/generateNonce");
 const { Account } = require("@commandokoala/thenewboston");
 const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS } = require("../constants");
@@ -18,6 +19,16 @@ const getPoll = async (req, res) => {
     const { id } = req.params;
     const poll = await Poll.findById(id).lean();
     return res.json(poll);
+  } catch (err) {
+    return res.json(err);
+  }
+};
+
+const getVotesOfPoll = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const votes = await Vote.find({ poll: id }).lean();
+    return res.json(votes);
   } catch (err) {
     return res.json(err);
   }
@@ -92,4 +103,5 @@ module.exports = {
   getPoll,
   createPoll,
   deletePoll,
+  getVotesOfPoll,
 };
