@@ -13,9 +13,9 @@ const voteRouter = require("./src/routes/vote");
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.json());
-app.use("/api/v1/poll", pollRouter);
+app.use("/api/v1/polls", pollRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authUserRouter);
-app.use("/api/v1/vote", voteRouter);
+app.use("/api/v1/votes", voteRouter);
 
 module.exports = app;
