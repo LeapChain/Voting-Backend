@@ -7,7 +7,11 @@ const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS } = require("../constants");
 
 const getAllPoll = async (req, res) => {
   try {
-    const polls = await Poll.find().lean();
+    var status = req.query.status;
+    if (!status) {
+      var status = "IN_PROGRESS";
+    }
+    const polls = await Poll.find({ status: status }).lean();
     return res.json(polls);
   } catch (err) {
     return res.json(err);
