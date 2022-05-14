@@ -13,6 +13,10 @@ const PollChoiceSchema = mongoose.Schema({
     minLength: 1,
     maxLength: 32,
   },
+  totalVotes: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const PollSchema = mongoose.Schema(
@@ -42,6 +46,10 @@ const PollSchema = mongoose.Schema(
       maxLength: 264,
     },
     url: String,
+    voteWeightage: {
+      type: Number,
+      default: 0,
+    },
     status: {
       type: Number,
       enum: PollStatus,
