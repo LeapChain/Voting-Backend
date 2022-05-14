@@ -9,38 +9,43 @@ const PollChoiceSchema = mongoose.Schema({
   },
 });
 
-const PollSchema = mongoose.Schema({
-  accountNumber: {
-    type: String,
-    required: true,
-    minLength: 64,
-    maxLength: 64,
-  },
-  signature: {
-    type: String,
-    required: true,
-    minLength: 128,
-    maxLength: 128,
-  },
-  title: {
-    type: String,
-    required: true,
-    minLength: 4,
-    maxLength: 64,
-  },
-  description: {
-    type: String,
-    required: true,
-    minLength: 4,
-    maxLength: 264,
-  },
-  url: String,
-  choices: [
-    {
-      type: PollChoiceSchema,
+const PollSchema = mongoose.Schema(
+  {
+    accountNumber: {
+      type: String,
       required: true,
+      minLength: 64,
+      maxLength: 64,
     },
-  ],
-});
+    signature: {
+      type: String,
+      required: true,
+      minLength: 128,
+      maxLength: 128,
+    },
+    title: {
+      type: String,
+      required: true,
+      minLength: 4,
+      maxLength: 64,
+    },
+    description: {
+      type: String,
+      required: true,
+      minLength: 4,
+      maxLength: 264,
+    },
+    url: String,
+    choices: [
+      {
+        type: PollChoiceSchema,
+        required: true,
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("Poll", PollSchema);
