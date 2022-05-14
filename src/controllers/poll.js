@@ -9,7 +9,8 @@ const getAllPoll = async (req, res) => {
   try {
     var status = req.query.status;
     if (!status) {
-      var status = "IN_PROGRESS";
+      const polls = await Poll.find().lean();
+      return res.json(polls);
     }
     const polls = await Poll.find({ status: status }).lean();
     return res.json(polls);
