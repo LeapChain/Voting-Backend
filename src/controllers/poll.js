@@ -23,17 +23,8 @@ const getPoll = async (req, res) => {
   try {
     const { id } = req.params;
     const poll = await Poll.findById(id).lean();
-    return res.json(poll);
-  } catch (err) {
-    return res.json(err);
-  }
-};
-
-const getVotesOfPoll = async (req, res) => {
-  try {
-    const { id } = req.params;
     const votes = await Vote.find({ poll: id }).lean();
-    return res.json(votes);
+    return res.json({ poll, votes });
   } catch (err) {
     return res.json(err);
   }
@@ -108,5 +99,4 @@ module.exports = {
   getPoll,
   createPoll,
   deletePoll,
-  getVotesOfPoll,
 };

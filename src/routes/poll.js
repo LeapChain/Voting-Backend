@@ -6,11 +6,9 @@ const {
   getPoll,
   createPoll,
   deletePoll,
-  getVotesOfPoll,
 } = require("../controllers/poll");
 
 router.route("/").get(getAllPoll).post(createPoll);
 router.route("/:id").get(getPoll).delete(deletePoll);
-router.route("/:id/votes").get(getVotesOfPoll);
 
 module.exports = router;
