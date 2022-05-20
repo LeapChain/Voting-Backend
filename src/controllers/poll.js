@@ -69,6 +69,32 @@ const createPoll = async (req, res) => {
   }
 };
 
+const updatePoll = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { voteWeightage, choices } = req.body;
+
+    const newPoll = await Poll.findOneAndUpdate(
+      { _id: id },
+      { voteWeightage: voteWeightage },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    for (const choice of choices) {
+      choice_subdoc = newPoll.choices.id(choice["_id"]);
+      if (choice_subdoc) {
+        choice_subdoc.totalVotes = choice["totalVotes"];
+      }
+    }
+    return res.json(newPoll);
+  } catch (err) {
+    return res.json(err);
+  }
+};
+
 const deletePoll = async (req, res) => {
   try {
     const { id } = req.params;
@@ -84,4 +110,5 @@ module.exports = {
   getPoll,
   createPoll,
   deletePoll,
+  updatePoll,
 };
