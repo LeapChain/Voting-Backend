@@ -74,22 +74,48 @@ const updatePoll = async (req, res) => {
     const { id } = req.params;
     const { voteWeightage, choices } = req.body;
 
-    const newPoll = await Poll.findOneAndUpdate(
-      { _id: id },
-      { voteWeightage: voteWeightage },
-      {
-        new: true,
-        runValidators: true,
-      }
+    const sortedChoices = req.body.choices.sort((a, b) =>
+      a._id > b._id ? 1 : -1
     );
 
-    for (const choice of choices) {
-      choice_subdoc = newPoll.choices.id(choice["_id"]);
-      if (choice_subdoc) {
-        choice_subdoc.totalVotes = choice["totalVotes"];
+    user = req.user;
+
+    const message = {
+      voteWeightage: voteWeightage,
+      nonce: user.nonce,
+      choices: sortedChoices,
+    };
+
+    const stringifiedMessage = JSON.stringify(message);
+
+    const isValidSignature = Account.verifySignature(
+      stringifiedMessage,
+      req.body.signature,
+      req.body.accountNumber
+    );
+
+    if (isValidSignature) {
+      const newPoll = await Poll.findOneAndUpdate(
+        { _id: id },
+        { voteWeightage: voteWeightage },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      for (const choice of choices) {
+        choice_subdoc = newPoll.choices.id(choice["_id"]);
+        if (choice_subdoc) {
+          choice_subdoc.totalVotes = choice["totalVotes"];
+        }
       }
+      return res.json(newPoll);
+    } else {
+      return res.json({
+        error: "Invalid Signature..",
+      });
     }
-    return res.json(newPoll);
   } catch (err) {
     return res.json(err);
   }
