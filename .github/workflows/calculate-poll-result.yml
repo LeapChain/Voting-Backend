@@ -1,6 +1,9 @@
-name: Calculate Poll Results
+name: LeapChain Voting Backend
 on: [push]
-steps:
-  - uses: actions/checkout@v3
-  - uses: actions/setup-python@v3
-  - run: python scripts/calculate_poll_results.py
+jobs:
+  Calculate Poll Results:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - run: python scripts/calculate_poll_results.py
