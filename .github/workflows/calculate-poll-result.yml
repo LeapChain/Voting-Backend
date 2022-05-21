@@ -6,4 +6,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
+      - run: pip install -r requirements.txt
       - run: python scripts/calculate_poll_results.py
