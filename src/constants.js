@@ -1,5 +1,5 @@
 WHITELISTEAD_POLL_ACCOUNT_NUMBERS = [
-  "c22f224dac22c6d02e94936f8ac256736555dcf270649f090b201a1bede9c5c8",
+  "3b2cb4e9276a06bafafd2344861df480fb68abf8cebac1025646cce3907fd422",
 ];
 
 module.exports = {
