@@ -110,6 +110,7 @@ const updatePoll = async (req, res) => {
           choice_subdoc.totalVotes = choice["totalVotes"];
         }
       }
+      newPoll.save();
       return res.json(newPoll);
     } else {
       return res.json({
