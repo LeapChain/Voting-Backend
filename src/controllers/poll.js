@@ -83,6 +83,7 @@ const updatePoll = async (req, res) => {
     const message = {
       voteWeightage: voteWeightage,
       nonce: user.nonce,
+      status: status,
       choices: sortedChoices,
     };
 
