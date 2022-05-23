@@ -5,7 +5,7 @@ from nacl.encoding import HexEncoder
 import nacl.signing
 
 BASE_API_URL = "https://7nfr0m.deta.dev"
-LEAPCHAIN_BALANCE_API_URL = "https://raw.githubusercontent.com/LeapChain/Account-Backups/master/account_backups/2022-04-17-15%3A08%3A28.json"
+LEAPCHAIN_BALANCE_API_URL = "https://raw.githubusercontent.com/LeapChain/Account-Backups/master/latest_backup/latest.json"
 POLL_DURATION = 5
 
 
