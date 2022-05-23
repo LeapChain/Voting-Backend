@@ -72,7 +72,7 @@ const createPoll = async (req, res) => {
 const updatePoll = async (req, res) => {
   try {
     const { id } = req.params;
-    const { voteWeightage, choices } = req.body;
+    const { voteWeightage, choices, status } = req.body;
 
     const sortedChoices = req.body.choices.sort((a, b) =>
       a._id > b._id ? 1 : -1
@@ -83,6 +83,7 @@ const updatePoll = async (req, res) => {
     const message = {
       voteWeightage: voteWeightage,
       nonce: user.nonce,
+      status: status,
       choices: sortedChoices,
     };
 
@@ -97,7 +98,7 @@ const updatePoll = async (req, res) => {
     if (isValidSignature) {
       const newPoll = await Poll.findOneAndUpdate(
         { _id: id },
-        { voteWeightage: voteWeightage },
+        { voteWeightage: voteWeightage, status: status },
         {
           new: true,
           runValidators: true,

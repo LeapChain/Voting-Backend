@@ -1,4 +1,5 @@
 import requests
+import datetime
 import json
 import os
 from nacl.encoding import HexEncoder
@@ -6,7 +7,7 @@ import nacl.signing
 
 BASE_API_URL = "https://7nfr0m.deta.dev"
 LEAPCHAIN_BALANCE_API_URL = "https://raw.githubusercontent.com/LeapChain/Account-Backups/master/latest_backup/latest.json"
-POLL_DURATION = 5
+POLL_DURATION = 5  # the runtime of poll in days
 
 
 class NetworkException(Exception):
@@ -51,7 +52,7 @@ def get_user_nonce(account_number):
     body = {
         "accountNumber": account_number
     }
-    return requests.post(url=f"{BASE_API_URL}/api/v1/users", json=body, headers={}).json()['nonce']
+    return requests.post(url=f"{BASE_API_URL}/api/v1/users/create", json=body, headers={}).json()['nonce']
 
 
 def list_active_polls():
@@ -73,6 +74,7 @@ def calculate_vote_results():
         temp_choices = []
         temp_choice_dict = {}
         choices = []
+        status = 0
 
         for vote in all_votes_on_poll:
 
@@ -83,6 +85,13 @@ def calculate_vote_results():
                 "_id": vote['choices'],
                 "totalVotes": voter_account_balance
                 })
+
+        poll_created_at = datetime.datetime.strptime(poll['createdAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
+        poll_expiry_date = poll_created_at + datetime.timedelta(days=POLL_DURATION)
+        current_date_time = datetime.datetime.now()
+
+        if current_date_time >= poll_expiry_date:
+            status = 1
 
         # merge duplicate choices and add the votes..
         for individual_choice in temp_choices:
@@ -108,6 +117,7 @@ def calculate_vote_results():
         message = {
             "voteWeightage": poll_vote_weightage,
             "nonce": get_user_nonce(account_number),
+            "status": status,
             "choices": sorted_choices,
         }
 
@@ -121,6 +131,7 @@ def calculate_vote_results():
         patch_request_body['signature'] = signature
         patch_request_body['voteWeightage'] = poll_vote_weightage
         patch_request_body['choices'] = sorted_choices
+        patch_request_body['status'] = status
         update_poll = requests.patch(url=f"{BASE_API_URL}/api/v1/polls/{poll['_id']}", json=patch_request_body, headers={}).json()
         print(update_poll)
         print("------------------------------------")
