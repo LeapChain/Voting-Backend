@@ -37,7 +37,7 @@ const authUser = async (req, res) => {
       accountNumber
     );
 
-    if (isValidSignature) {
+    if (!isValidSignature) {
       return res.json({
         errors: {},
         _message: "Signature validation failed",
