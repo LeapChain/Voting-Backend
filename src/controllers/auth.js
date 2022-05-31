@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const { Account } = require("@commandokoala/thenewboston");
+const { verifySignature } = require("@leapchain/dleap");
 const generateNonce = require("../utils/generateNonce");
 
 const authUser = async (req, res) => {
@@ -31,11 +31,7 @@ const authUser = async (req, res) => {
 
     const message = `Signing my leapchain nonce: ${user.nonce}`;
 
-    const isValidSignature = Account.verifySignature(
-      message,
-      signature,
-      accountNumber
-    );
+    const isValidSignature = verifySignature(message, signature, accountNumber);
 
     if (!isValidSignature) {
       return res.json({

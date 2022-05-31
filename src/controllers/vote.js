@@ -2,7 +2,7 @@ const Vote = require("../models/Vote");
 const User = require("../models/User");
 
 const generateNonce = require("../utils/generateNonce");
-const { Account } = require("@commandokoala/thenewboston");
+const { verifySignature } = require("@leapchain/dleap");
 
 const createVote = async (req, res) => {
   try {
@@ -25,7 +25,7 @@ const createVote = async (req, res) => {
 
     const stringifiedMessage = JSON.stringify(message);
 
-    const isValidSignature = Account.verifySignature(
+    const isValidSignature = verifySignature(
       stringifiedMessage,
       signature,
       accountNumber
