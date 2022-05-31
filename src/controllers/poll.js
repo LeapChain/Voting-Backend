@@ -1,9 +1,7 @@
 const Poll = require("../models/Poll");
-const User = require("../models/User");
 const Vote = require("../models/Vote");
 const generateNonce = require("../utils/generateNonce");
-const { Account } = require("@commandokoala/thenewboston");
-const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS } = require("../constants");
+const { verifySignature } = require("@leapchain/dleap");
 
 const getAllPoll = async (req, res) => {
   try {
@@ -48,7 +46,7 @@ const createPoll = async (req, res) => {
 
     const stringifiedMessage = JSON.stringify(message);
 
-    const isValidSignature = Account.verifySignature(
+    const isValidSignature = verifySignature(
       stringifiedMessage,
       req.body.signature,
       req.body.accountNumber
@@ -89,7 +87,7 @@ const updatePoll = async (req, res) => {
 
     const stringifiedMessage = JSON.stringify(message);
 
-    const isValidSignature = Account.verifySignature(
+    const isValidSignature = verifySignature(
       stringifiedMessage,
       req.body.signature,
       req.body.accountNumber
