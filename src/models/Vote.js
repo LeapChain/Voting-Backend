@@ -14,6 +14,10 @@ const VoteSchema = mongoose.Schema(
       minLength: 128,
       maxLength: 128,
     },
+    nonce: {
+      type: Number,
+      required: true,
+    },
     poll: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Poll",

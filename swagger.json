@@ -46,9 +46,6 @@
                 "accountNumber": {
                   "example": "any"
                 },
-                "choices": {
-                  "example": "any"
-                },
                 "title": {
                   "example": "any"
                 },
@@ -56,6 +53,12 @@
                   "example": "any"
                 },
                 "url": {
+                  "example": "any"
+                },
+                "nonce": {
+                  "example": 696969
+                },
+                "choices": {
                   "example": "any"
                 },
                 "signature": {
@@ -121,6 +124,9 @@
                 },
                 "status": {
                   "example": "any"
+                },
+                "nonce": {
+                  "example": 696969
                 }
               }
             }
@@ -197,14 +203,17 @@
             "schema": {
               "type": "object",
               "properties": {
+                "accountNumber": {
+                  "example": "any"
+                },
                 "choices": {
                   "example": "any"
                 },
                 "poll": {
                   "example": "any"
                 },
-                "accountNumber": {
-                  "example": "any"
+                "nonce": {
+                  "example": 696969
                 },
                 "signature": {
                   "example": "any"

@@ -50,6 +50,10 @@ const PollSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    nonce: {
+      type: Number,
+      required: true,
+    },
     status: {
       type: Number,
       enum: PollStatus,
