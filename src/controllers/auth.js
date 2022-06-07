@@ -31,7 +31,7 @@ const authUser = async (req, res) => {
 
     const message = `Signing my leapchain nonce: ${user.nonce}`;
 
-    const isValidSignature = verifySignature(message, signature, accountNumber);
+    const isValidSignature = verifySignature(signature, message, accountNumber);
 
     if (!isValidSignature) {
       return res.json({

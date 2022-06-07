@@ -47,8 +47,8 @@ const createPoll = async (req, res) => {
     const stringifiedMessage = JSON.stringify(message);
 
     const isValidSignature = verifySignature(
-      stringifiedMessage,
       req.body.signature,
+      stringifiedMessage,
       req.body.accountNumber
     );
 
@@ -88,8 +88,8 @@ const updatePoll = async (req, res) => {
     const stringifiedMessage = JSON.stringify(message);
 
     const isValidSignature = verifySignature(
-      stringifiedMessage,
       req.body.signature,
+      stringifiedMessage,
       req.body.accountNumber
     );
 
