@@ -13,7 +13,7 @@ const getAllPoll = async (req, res) => {
     const polls = await Poll.find({ status: status }).lean();
     return res.json(polls);
   } catch (err) {
-    return res.json(err);
+    return res.status(400).json(err);
   }
 };
 
@@ -24,7 +24,7 @@ const getPoll = async (req, res) => {
     const votes = await Vote.find({ poll: id }).lean();
     return res.json({ poll, votes });
   } catch (err) {
-    return res.json(err);
+    return res.status(400).json(err);
   }
 };
 
@@ -37,11 +37,11 @@ const createPoll = async (req, res) => {
     user = req.user;
 
     const message = {
-      title: req.body.title,
-      description: req.body.description,
-      url: req.body.url,
-      nonce: user.nonce,
       choices: sortedChoices,
+      description: req.body.description,
+      nonce: user.nonce,
+      title: req.body.title,
+      url: req.body.url,
     };
 
     const stringifiedMessage = JSON.stringify(message);
@@ -58,12 +58,12 @@ const createPoll = async (req, res) => {
       await user.save();
       return res.json(poll);
     } else {
-      return res.json({
+      return res.status(400).json({
         error: "Invalid Signature..",
       });
     }
   } catch (err) {
-    return res.json(err);
+    return res.status(400).json(err);
   }
 };
 
@@ -79,10 +79,10 @@ const updatePoll = async (req, res) => {
     user = req.user;
 
     const message = {
-      voteWeightage: voteWeightage,
+      choices: sortedChoices,
       nonce: user.nonce,
       status: status,
-      choices: sortedChoices,
+      voteWeightage: voteWeightage,
     };
 
     const stringifiedMessage = JSON.stringify(message);
@@ -117,7 +117,7 @@ const updatePoll = async (req, res) => {
       });
     }
   } catch (err) {
-    return res.json(err);
+    return res.status(400).json(err);
   }
 };
 
@@ -127,7 +127,7 @@ const deletePoll = async (req, res) => {
     const poll = await Poll.findById(id);
     return res.json(poll);
   } catch (err) {
-    return res.json(err);
+    return res.status(400).json(err);
   }
 };
 

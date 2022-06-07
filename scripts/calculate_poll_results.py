@@ -115,10 +115,10 @@ def calculate_vote_results():
         account_number = signing_key.verify_key.encode(encoder=nacl.encoding.HexEncoder).decode('utf-8')
 
         message = {
-            "voteWeightage": poll_vote_weightage,
+            "choices": sorted_choices,
             "nonce": get_user_nonce(account_number),
             "status": status,
-            "choices": sorted_choices,
+            "voteWeightage": poll_vote_weightage,
         }
 
         json_message = json.dumps(message, separators=(',', ':'))
