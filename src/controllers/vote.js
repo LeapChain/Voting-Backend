@@ -35,6 +35,11 @@ const createVote = async (req, res) => {
     if (isValidSignature) {
       const isActivePoll = await Poll.exists({ status: 0, _id: req.body.poll });
       if (isActivePoll) {
+        await Vote.deleteMany({
+          accountNumber: accountNumber,
+          poll: req.body.poll,
+        });
+
         const vote = await Vote.create(req.body);
 
         user.nonce = generateNonce();
