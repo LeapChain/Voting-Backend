@@ -19,8 +19,8 @@ const createVote = async (req, res) => {
 
     const message = {
       choices: req.body.choices,
-      poll: req.body.poll,
       nonce: user.nonce,
+      poll: req.body.poll,
     };
 
     const stringifiedMessage = JSON.stringify(message);
