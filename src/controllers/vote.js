@@ -1,5 +1,6 @@
 const Vote = require("../models/Vote");
 const User = require("../models/User");
+const Poll = require("../models/Poll");
 
 const generateNonce = require("../utils/generateNonce");
 const { verifySignature, createSignature } = require("@leapchain/dleap");
@@ -32,12 +33,21 @@ const createVote = async (req, res) => {
     );
 
     if (isValidSignature) {
-      const vote = await Vote.create(req.body);
-      user.nonce = generateNonce();
-      await user.save();
-      return res.json(vote);
+      const isActivePoll = await Poll.exists({ status: 0, _id: req.body.poll });
+      if (isActivePoll) {
+        const vote = await Vote.create(req.body);
+
+        user.nonce = generateNonce();
+        await user.save();
+
+        return res.json(vote);
+      } else {
+        return res.status(400).json({
+          error: "Sorry, the poll is not active anymore to cast the votes..",
+        });
+      }
     } else {
-      return res.json({
+      return res.status(400).json({
         error: "Invalid Signature..",
       });
     }
