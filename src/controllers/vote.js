@@ -25,13 +25,6 @@ const createVote = async (req, res) => {
 
     const stringifiedMessage = JSON.stringify(message);
 
-    console.log(stringifiedMessage);
-    const testSignature = createSignature(
-      stringifiedMessage,
-      "ea37b7d45aa88a659f596f3315ed8168fd5127446f33dc0d400b92103d1ce774"
-    );
-    console.log(testSignature);
-
     const isValidSignature = verifySignature(
       signature,
       stringifiedMessage,
