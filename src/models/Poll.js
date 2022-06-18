@@ -37,13 +37,13 @@ const PollSchema = mongoose.Schema(
       type: String,
       required: true,
       minLength: 4,
-      maxLength: 64,
+      maxLength: 264,
     },
     description: {
       type: String,
       required: true,
       minLength: 4,
-      maxLength: 264,
+      maxLength: 512,
     },
     url: String,
     voteWeightage: {
