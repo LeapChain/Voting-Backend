@@ -76,6 +76,10 @@ def calculate_vote_results():
         choices = []
         status = 0
 
+        # initiate the temp_choice_dictionary
+        for choice in poll['choices']:
+            temp_choice_dict[choice['_id']] = 0
+
         for vote in all_votes_on_poll:
 
             voter_account_balance = get_account_balance(vote['accountNumber'])
@@ -94,11 +98,10 @@ def calculate_vote_results():
             status = 1
 
         # merge duplicate choices and add the votes..
+        # ignore the votes that were not part of poll choices
         for individual_choice in temp_choices:
             if individual_choice["_id"] in temp_choice_dict:
                 temp_choice_dict[individual_choice["_id"]] += individual_choice["totalVotes"]
-            else:
-                temp_choice_dict[individual_choice["_id"]] = individual_choice["totalVotes"]
 
         # convert the temp_choice_dict to list of choice with values
         for choice in temp_choice_dict:
