@@ -7,7 +7,7 @@ import nacl.signing
 
 BASE_API_URL = "https://7nfr0m.deta.dev"
 LEAPCHAIN_BALANCE_API_URL = "https://raw.githubusercontent.com/LeapChain/Account-Backups/master/latest_backup/latest.json"
-POLL_DURATION = 5  # the runtime of poll in days
+POLL_DURATION = 3  # the runtime of poll in days
 
 
 class NetworkException(Exception):
