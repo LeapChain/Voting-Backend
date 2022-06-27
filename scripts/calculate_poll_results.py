@@ -5,34 +5,11 @@ import os
 from nacl.encoding import HexEncoder
 import nacl.signing
 
+from utils import fetch
+
 BASE_API_URL = "https://7nfr0m.deta.dev"
 LEAPCHAIN_BALANCE_API_URL = "https://raw.githubusercontent.com/LeapChain/Account-Backups/master/latest_backup/latest.json"
 POLL_DURATION = 3  # the runtime of poll in days
-
-
-class NetworkException(Exception):
-    pass
-
-
-def fetch(*, url, headers):
-    """
-    Send a GET request and return response as Python object
-    """
-
-    response = requests.get(url, headers=headers)
-    return validate_response(response)
-
-
-def validate_response(response):
-    """
-    Validate status code
-    Return response as Python object
-    """
-    if response.status_code >= 400:
-        err = f'status_code:{response.status_code} - {response.text}'
-        raise NetworkException(err)
-
-    return response.json()
 
 
 def get_all_account_balances():
@@ -139,5 +116,6 @@ def calculate_vote_results():
         print(update_poll)
         print("------------------------------------")
 
-
+print("Beep, boop; calculating the poll results....")
 calculate_vote_results()
+print("Beep, boop; poll results updated successfully....")
