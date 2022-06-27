@@ -134,3 +134,6 @@ dist
 
 # DETA FOLDERS
 .deta/*
+
+# Python
+__pycache__/
