@@ -6,16 +6,10 @@
 
 Copy the contents of `.env.example` file to `.env` and update the environment variables.
 
-Build the image
+Build and run the image
 
 ```shell
-docker build -t leapcoin-voting-api .
-```
-
-Run the server
-
-```shell
-docker run -d -p 3000:3000 --name leapcoin-voting-api leapcoin-voting-api
+docker-compose up -d --build
 ```
 
 Now navigate to `http://127.0.0.1:3000/` and the server should be running.
