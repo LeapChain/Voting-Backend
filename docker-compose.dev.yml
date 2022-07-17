@@ -12,6 +12,8 @@ services:
       - NODE_ENV=development
       - MONGO_URI=mongodb://leapcoin:leapcoin@mongo:27017/?authSource=admin
     command: npm run dev
+    depends_on:
+      - mongo
   
   mongo:
     image: mongo
