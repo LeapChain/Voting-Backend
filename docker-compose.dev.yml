@@ -11,3 +11,14 @@ services:
     environment:
       - NODE_ENV=development
     command: npm run dev
+  
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=leapcoin
+      - MONGO_INITDB_ROOT_PASSWORD=leapcoin
+    volumes:
+      - mongo-db:/data/db
+
+volumes:
+  mongo-db:
