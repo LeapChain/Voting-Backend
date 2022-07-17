@@ -5,8 +5,7 @@ const doc = {
     title: "Leapchain Voting API",
     description: "API documentation of Leapchain.",
   },
-  host: "7nfr0m.deta.dev",
-  schemes: ["https"],
+  schemes: ["http", "https"],
   securityDefinitions: {
     jwt: {
       type: "apiKey",

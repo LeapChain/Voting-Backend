@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  leapcoin-voting-api:
+    build:
+      context: .
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+    command: node server.js
