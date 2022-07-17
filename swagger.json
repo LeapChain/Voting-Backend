@@ -5,11 +5,8 @@
     "description": "API documentation of Leapchain.",
     "version": "1.0.0"
   },
-  "host": "7nfr0m.deta.dev",
   "basePath": "/",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["http", "https"],
   "securityDefinitions": {
     "jwt": {
       "type": "apiKey",
@@ -59,7 +56,14 @@
                   "example": 696969
                 },
                 "choices": {
-                  "example": "any"
+                  "example": [
+                    {
+                      "title": "string"
+                    },
+                    {
+                      "title": "string"
+                    }
+                  ]
                 },
                 "signature": {
                   "example": "any"
@@ -92,52 +96,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      },
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "accountNumber": {
-                  "example": "any"
-                },
-                "choices": {
-                  "example": "any"
-                },
-                "signature": {
-                  "example": "any"
-                },
-                "voteWeightage": {
-                  "example": "any"
-                },
-                "status": {
-                  "example": "any"
-                },
-                "nonce": {
-                  "example": 696969
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
       }
