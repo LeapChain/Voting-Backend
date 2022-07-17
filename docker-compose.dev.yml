@@ -10,6 +10,7 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - MONGO_URI=mongodb://leapcoin:leapcoin@mongo:27017/?authSource=admin
     command: npm run dev
   
   mongo:
