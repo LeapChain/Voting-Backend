@@ -13,6 +13,7 @@ const userRouter = require("./src/routes/user");
 const authUserRouter = require("./src/routes/auth");
 const voteRouter = require("./src/routes/vote");
 
+app.enable("trust proxy");
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.json());

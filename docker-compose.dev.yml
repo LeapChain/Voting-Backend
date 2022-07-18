@@ -1,5 +1,10 @@
 version: "3.9"
 services:
+  nginx:
+    ports:
+      - "3000:80"
+    depends_on:
+      - leapcoin-voting-api
   leapcoin-voting-api:
     build:
       context: .
@@ -12,6 +17,8 @@ services:
       - NODE_ENV=development
       - MONGO_URI=mongodb://leapcoin:leapcoin@mongo:27017/?authSource=admin
     command: npm run dev
+    depends_on:
+      - mongo
   
   mongo:
     image: mongo
