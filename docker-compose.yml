@@ -5,4 +5,5 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
   leapcoin-voting-api:
+    image: hussu010/leapcoin-voting-api
     env_file: .env
