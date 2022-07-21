@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 
+const VoteType = {
+  GOVERNANCE: "GOVERNANCE",
+  POLL: "POLL",
+};
+
 const VoteSchema = mongoose.Schema(
   {
     accountNumber: {
@@ -21,12 +26,18 @@ const VoteSchema = mongoose.Schema(
     poll: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Poll",
-      required: true,
     },
     choices: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Poll.choices",
-      required: true,
+    },
+    votedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    type: {
+      type: String,
+      enum: VoteType,
     },
   },
   {
