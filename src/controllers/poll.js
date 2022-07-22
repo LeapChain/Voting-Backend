@@ -20,8 +20,10 @@ const getAllPoll = async (req, res) => {
 const getPoll = async (req, res) => {
   try {
     const { id } = req.params;
-    const poll = await Poll.findById(id).lean();
-    const votes = await Vote.find({ poll: id }).lean();
+    const pollPromise = Poll.findById(id).lean();
+    const votesPromise = Vote.find({ poll: id }).lean();
+
+    const [poll, votes] = await Promise.all([pollPromise, votesPromise]);
     poll.votes = votes;
 
     return res.json(poll);
