@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const isAdminAccount = require("../middleware/isAdminAccount");
+const { PollSchema } = require("../schema/pollSchema");
+const {
+  validateRequestSchema,
+} = require("../middleware/validateRequestSchema");
 
 const {
   getAllPoll,
@@ -11,7 +15,7 @@ const {
 } = require("../controllers/poll");
 
 router.get("/", getAllPoll);
-router.post("/", isAdminAccount, createPoll);
+router.post("/", PollSchema, validateRequestSchema, isAdminAccount, createPoll);
 router.get("/:id", getPoll);
 router.patch("/:id", isAdminAccount, updatePoll);
 
