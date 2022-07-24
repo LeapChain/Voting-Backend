@@ -1,66 +1,46 @@
 const Vote = require("../models/Vote");
-const User = require("../models/User");
 const Poll = require("../models/Poll");
 
 const generateNonce = require("../utils/generateNonce");
-const { verifySignature, createSignature } = require("@leapchain/dleap");
 
-const createVote = async (req, res) => {
+const createPollVote = async (req, res) => {
   try {
     const { accountNumber, signature } = req.body;
+    const { nonce, choices } = req.body.message;
+    const pollID = req.params.id;
 
-    const user = await User.findOne({ accountNumber });
+    const isActivePoll = await Poll.exists({ status: 0, _id: pollID });
 
-    if (!user) {
-      return res.json({
-        error:
-          "User validation failed: User associated with `accountNumber` does not exist..",
+    if (isActivePoll) {
+      await Vote.deleteMany({
+        accountNumber: accountNumber,
+        poll: pollID,
       });
-    }
 
-    const message = {
-      choices: req.body.choices,
-      nonce: user.nonce,
-      poll: req.body.poll,
-    };
+      const vote = await Vote.create({
+        accountNumber,
+        signature,
+        nonce,
+        poll: pollID,
+        choices,
+        type: "POLL",
+      });
 
-    const stringifiedMessage = JSON.stringify(message);
+      user = req.user;
+      user.nonce = generateNonce();
+      await user.save();
 
-    const isValidSignature = verifySignature(
-      signature,
-      stringifiedMessage,
-      accountNumber
-    );
-
-    if (isValidSignature) {
-      const isActivePoll = await Poll.exists({ status: 0, _id: req.body.poll });
-      if (isActivePoll) {
-        await Vote.deleteMany({
-          accountNumber: accountNumber,
-          poll: req.body.poll,
-        });
-
-        const vote = await Vote.create(req.body);
-
-        user.nonce = generateNonce();
-        await user.save();
-
-        return res.json(vote);
-      } else {
-        return res.status(400).json({
-          error: "Sorry, the poll is not active anymore to cast the votes..",
-        });
-      }
+      return res.json(vote);
     } else {
       return res.status(400).json({
-        error: "Invalid Signature..",
+        error: "Sorry, the poll is not active anymore to cast the votes..",
       });
     }
   } catch (err) {
-    res.json(err);
+    res.status(500).json(err);
   }
 };
 
 module.exports = {
-  createVote,
+  createPollVote,
 };
