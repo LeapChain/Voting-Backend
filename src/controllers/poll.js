@@ -34,38 +34,24 @@ const getPoll = async (req, res) => {
 
 const createPoll = async (req, res) => {
   try {
-    const sortedChoices = req.body.choices.sort((a, b) =>
-      a.title > b.title ? 1 : -1
-    );
+    const { accountNumber, signature } = req.body;
+    const { title, description, url, nonce, choices } = req.body.message;
+
+    const poll = await Poll.create({
+      accountNumber,
+      title,
+      description,
+      url,
+      nonce,
+      choices,
+      signature,
+    });
 
     user = req.user;
+    user.nonce = generateNonce();
+    user.save();
 
-    const message = {
-      choices: sortedChoices,
-      description: req.body.description,
-      nonce: user.nonce,
-      title: req.body.title,
-      url: req.body.url,
-    };
-
-    const stringifiedMessage = JSON.stringify(message);
-
-    const isValidSignature = verifySignature(
-      req.body.signature,
-      stringifiedMessage,
-      req.body.accountNumber
-    );
-
-    if (isValidSignature) {
-      const poll = await Poll.create(req.body);
-      user.nonce = generateNonce();
-      await user.save();
-      return res.json(poll);
-    } else {
-      return res.status(400).json({
-        error: "Invalid Signature..",
-      });
-    }
+    return res.json(poll);
   } catch (err) {
     return res.status(400).json(err);
   }

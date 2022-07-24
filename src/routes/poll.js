@@ -5,17 +5,24 @@ const { PollSchema } = require("../schema/pollSchema");
 const {
   validateRequestSchema,
 } = require("../middleware/validateRequestSchema");
+const { validateSignature } = require("../middleware/validateSignature");
 
 const {
   getAllPoll,
   getPoll,
   createPoll,
-  deletePoll,
   updatePoll,
 } = require("../controllers/poll");
 
 router.get("/", getAllPoll);
-router.post("/", PollSchema, validateRequestSchema, isAdminAccount, createPoll);
+router.post(
+  "/",
+  PollSchema,
+  validateRequestSchema,
+  isAdminAccount,
+  validateSignature,
+  createPoll
+);
 router.get("/:id", getPoll);
 router.patch("/:id", isAdminAccount, updatePoll);
 

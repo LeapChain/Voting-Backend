@@ -4,16 +4,6 @@ const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS } = require("../constants");
 const isAdminAccount = async (req, res, next) => {
   const { accountNumber } = req.body;
 
-  if (accountNumber == null) {
-    return res.status(401).json({
-      errors: {},
-      _message: "Authentication Failed.",
-      name: "Unauthenticated",
-      message:
-        "Authentication Failed: Please include `accountNumber` in the body of request.",
-    });
-  }
-
   if (WHITELISTEAD_POLL_ACCOUNT_NUMBERS.includes(accountNumber)) {
     const user = await User.findOne({ accountNumber });
 
