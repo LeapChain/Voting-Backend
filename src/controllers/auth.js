@@ -17,7 +17,7 @@ const authUser = async (req, res) => {
 
     return res.json({ user, accessToken: accessToken });
   } catch (err) {
-    return res.json(err);
+    return res.status(500).json(err);
   }
 };
 

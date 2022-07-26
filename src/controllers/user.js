@@ -11,7 +11,7 @@ const createUser = async (req, res) => {
     }
     return res.json(user);
   } catch (err) {
-    return res.json(err);
+    return res.status(500).json(err);
   }
 };
 
