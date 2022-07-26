@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 const generateNonce = require("../utils/generateNonce");
-
-const UserType = {
-  GENERAL: "GENERAL",
-  GOVERNER: "GOVERNER",
-};
+const { UserType } = require("../constants");
 
 const UserSchema = new mongoose.Schema(
   {

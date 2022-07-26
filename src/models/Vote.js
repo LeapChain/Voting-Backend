@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 
-const VoteType = {
-  GOVERNANCE: "GOVERNANCE",
-  POLL: "POLL",
-};
+const { VoteType } = require("../constants");
 
 const VoteSchema = mongoose.Schema(
   {

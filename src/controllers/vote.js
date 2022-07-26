@@ -4,7 +4,11 @@ const User = require("../models/User");
 
 const generateNonce = require("../utils/generateNonce");
 
-const { MAX_GOVERNANCE_VOTE_PER_ACCOUNT } = require("../constants");
+const {
+  MAX_GOVERNANCE_VOTE_PER_ACCOUNT,
+  VoteType,
+  UserType,
+} = require("../constants");
 
 const createPollVote = async (req, res) => {
   try {
@@ -26,7 +30,7 @@ const createPollVote = async (req, res) => {
         nonce,
         poll: pollID,
         choices,
-        type: "POLL",
+        type: VoteType.POLL,
       });
 
       user = req.user;
@@ -57,15 +61,16 @@ const createUserVote = async (req, res) => {
     const userID = req.params.id;
 
     const userCanBeVoted = await User.exists({
-      type: "GOVERNER",
+      type: UserType.GOVERNER,
       _id: userID,
     });
 
     if (userCanBeVoted) {
       const totalVotesByUser = await Vote.count({
-        type: "GOVERNANCE",
+        type: VoteType.GOVERNANCE,
         accountNumber,
       });
+
       if (totalVotesByUser > MAX_GOVERNANCE_VOTE_PER_ACCOUNT) {
         return res.status(400).json({
           errors: [
@@ -87,7 +92,7 @@ const createUserVote = async (req, res) => {
           signature,
           nonce,
           votedTo: userID,
-          type: "GOVERNANCE",
+          type: VoteType.GOVERNANCE,
         });
 
         user = req.user;
