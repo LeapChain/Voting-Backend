@@ -22,10 +22,17 @@ const VoteType = {
   POLL: "POLL",
 };
 
+const PaymentStatus = {
+  PENDING: "PENDING",
+  COMPLETED: "COMPLETED",
+  CANCELLED: "CANCELLED",
+};
+
 module.exports = {
   WHITELISTEAD_POLL_ACCOUNT_NUMBERS,
   MAX_GOVERNANCE_VOTE_PER_ACCOUNT,
   PollStatus,
   UserType,
   VoteType,
+  PaymentStatus,
 };
