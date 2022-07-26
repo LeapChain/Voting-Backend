@@ -5,6 +5,11 @@ WHITELISTEAD_POLL_ACCOUNT_NUMBERS = [
 ];
 
 MAX_GOVERNANCE_VOTE_PER_ACCOUNT = 3;
+GOVERNOR_REQUEST_FEE = 2000;
+
+const MemoType = {
+  GOVERNER_REQUEST: "GOVERNERREQUEST",
+};
 
 const PollStatus = {
   IN_PROGRESS: 0,
@@ -31,8 +36,10 @@ const PaymentStatus = {
 module.exports = {
   WHITELISTEAD_POLL_ACCOUNT_NUMBERS,
   MAX_GOVERNANCE_VOTE_PER_ACCOUNT,
+  GOVERNOR_REQUEST_FEE,
   PollStatus,
   UserType,
   VoteType,
   PaymentStatus,
+  MemoType,
 };
