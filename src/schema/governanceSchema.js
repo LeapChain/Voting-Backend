@@ -9,9 +9,9 @@ const governorRequestSchema = [
     min: 128,
     max: 128,
   }),
-  body("message.username", "message.username field is required").exists({
-    checkFalsy: true,
-    checkNull: true,
+  body("message.username", "message.username field is required").isLength({
+    min: 4,
+    max: 32,
   }),
   body("message.nonce", "message.nonce field is required").exists({
     checkFalsy: true,
