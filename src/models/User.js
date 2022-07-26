@@ -18,6 +18,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: UserType.GENERAL,
     },
+    username: String,
   },
   {
     timestamps: true,

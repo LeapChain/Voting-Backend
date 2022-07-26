@@ -13,7 +13,7 @@ const getAllPoll = async (req, res) => {
     const polls = await Poll.find({ status: status }).lean();
     return res.json(polls);
   } catch (err) {
-    return res.status(400).json(err);
+    return res.status(500).json(err);
   }
 };
 
@@ -28,7 +28,7 @@ const getPoll = async (req, res) => {
 
     return res.json(poll);
   } catch (err) {
-    return res.status(400).json(err);
+    return res.status(500).json(err);
   }
 };
 
@@ -53,7 +53,7 @@ const createPoll = async (req, res) => {
 
     return res.json(poll);
   } catch (err) {
-    return res.status(400).json(err);
+    return res.status(500).json(err);
   }
 };
 
@@ -107,7 +107,7 @@ const updatePoll = async (req, res) => {
       });
     }
   } catch (err) {
-    return res.status(400).json(err);
+    return res.status(500).json(err);
   }
 };
 
@@ -117,7 +117,7 @@ const deletePoll = async (req, res) => {
     const poll = await Poll.findById(id);
     return res.json(poll);
   } catch (err) {
-    return res.status(400).json(err);
+    return res.status(500).json(err);
   }
 };
 

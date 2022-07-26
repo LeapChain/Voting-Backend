@@ -50,7 +50,7 @@ const createPollVote = async (req, res) => {
       });
     }
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };
 
@@ -113,7 +113,7 @@ const createUserVote = async (req, res) => {
       });
     }
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };
 
