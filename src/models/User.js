@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const generateNonce = require("../utils/generateNonce");
 
+const UserType = {
+  GENERAL: "GENERAL",
+  GOVERNER: "GOVERNER",
+};
+
 const UserSchema = new mongoose.Schema(
   {
     accountNumber: {
@@ -12,6 +17,10 @@ const UserSchema = new mongoose.Schema(
     nonce: {
       type: Number,
       default: generateNonce(),
+    },
+    type: {
+      type: String,
+      default: UserType.GENERAL,
     },
   },
   {
