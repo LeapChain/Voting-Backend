@@ -36,7 +36,13 @@ const createPollVote = async (req, res) => {
       return res.json(vote);
     } else {
       return res.status(400).json({
-        error: "Sorry, the poll is not active anymore to cast the votes..",
+        errors: [
+          {
+            msg: "The poll is not active anymore to cast the votes..",
+            param: "id",
+            location: "param",
+          },
+        ],
       });
     }
   } catch (err) {
@@ -91,7 +97,15 @@ const createUserVote = async (req, res) => {
         return res.json(vote);
       }
     } else {
-      return res.json("You cannot vote this user oops");
+      return res.json({
+        errors: [
+          {
+            msg: "The user is not eligible to be voted on..",
+            param: "id",
+            location: "param",
+          },
+        ],
+      });
     }
   } catch (err) {
     res.status(500).json(err);
