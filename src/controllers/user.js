@@ -7,7 +7,7 @@ const createUser = async (req, res) => {
     var user = await User.findOne({ accountNumber: accountNumber }).lean();
 
     if (!user) {
-      var user = await User.create(req.body);
+      var user = await User.create({ accountNumber });
     }
     return res.json(user);
   } catch (err) {

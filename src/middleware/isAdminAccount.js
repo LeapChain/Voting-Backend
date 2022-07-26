@@ -9,15 +9,26 @@ const isAdminAccount = async (req, res, next) => {
 
     if (!user) {
       return res.json({
-        error:
-          "User validation failed: User associated with `accountNumber` does not exist..",
+        errors: [
+          {
+            msg: "User validation failed: User associated with `accountNumber` does not exist..",
+            param: "accountNumber",
+            location: "body",
+          },
+        ],
       });
     }
     req.user = user;
     next();
   } else {
     return res.json({
-      error: "accountNumber is not in the whiltelist..",
+      errors: [
+        {
+          msg: "accountNumber is not in the whiltelist..",
+          param: "accountNumber",
+          location: "body",
+        },
+      ],
     });
   }
 };
