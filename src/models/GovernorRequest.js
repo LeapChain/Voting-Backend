@@ -4,9 +4,21 @@ const { PaymentStatus } = require("../constants");
 
 const governorRequestSchema = mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    accountNumber: {
+      type: String,
+      required: true,
+      minLength: 64,
+      maxLength: 64,
+    },
+    signature: {
+      type: String,
+      required: true,
+      minLength: 128,
+      maxLength: 128,
+    },
+    nonce: {
+      type: Number,
+      required: true,
     },
     username: {
       type: String,
@@ -14,7 +26,7 @@ const governorRequestSchema = mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: VoteType,
+      enum: PaymentStatus,
       default: PaymentStatus.PENDING,
     },
     transaction: {
