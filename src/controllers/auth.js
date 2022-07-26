@@ -15,7 +15,10 @@ const authUser = async (req, res) => {
     user.nonce = generateNonce();
     user.save();
 
-    return res.json({ user, accessToken: accessToken });
+    user = user.toObject();
+    user.accessToken = accessToken;
+
+    return res.json(user);
   } catch (err) {
     return res.status(500).json(err);
   }
