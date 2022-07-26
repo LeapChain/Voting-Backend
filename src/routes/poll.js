@@ -36,8 +36,8 @@ router.post(
   "/:id/vote",
   pollVoteSchema,
   validateRequestSchema,
-  validateSignature,
   userExists,
+  validateSignature,
   createPollVote
 );
 
