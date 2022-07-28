@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  nginx:
+    ports:
+      - "3000:80"
+    depends_on:
+      - leapcoin-voting-api
+  leapcoin-voting-api:
+    build:
+      context: .
+      args:
+        NODE_ENV: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://leapcoin:leapcoin@mongo:27017/?authSource=admin
+    command: npm run dev
+    depends_on:
+      - mongo
+  
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=leapcoin
+      - MONGO_INITDB_ROOT_PASSWORD=leapcoin
+    volumes:
+      - mongo-db:/data/db
+
+volumes:
+  mongo-db:

@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  nginx:
+    ports:
+      - "80:80"
+    depends_on:
+      - leapcoin-voting-api
+  leapcoin-voting-api:
+    build:
+      context: .
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+    command: node server.js
