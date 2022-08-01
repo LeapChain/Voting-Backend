@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { createUser } = require("../controllers/user");
-const { createUserVote } = require("../controllers/vote");
+const { createUserVote, cancelUserVote } = require("../controllers/vote");
 const { applyForGovernor } = require("../controllers/governance");
 
 const {
@@ -33,6 +33,15 @@ router.post(
   userExists,
   validateSignature,
   createUserVote
+);
+
+router.post(
+  "/:id/unvote",
+  userVoteSchema,
+  validateRequestSchema,
+  userExists,
+  validateSignature,
+  cancelUserVote
 );
 
 module.exports = router;
