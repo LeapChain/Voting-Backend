@@ -11,6 +11,12 @@ const {
 } = require("../constants");
 
 const createPollVote = async (req, res) => {
+  /*  #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'allow users to vote on the poll...',
+        required: true,
+        schema: { $ref: "#/definitions/pollVote" }
+    } */
   try {
     const { accountNumber, signature } = req.body;
     const { nonce, choices } = req.body.message;
@@ -55,6 +61,12 @@ const createPollVote = async (req, res) => {
 };
 
 const createUserVote = async (req, res) => {
+  /*  #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'allow users to vote for governers...',
+        required: true,
+        schema: { $ref: "#/definitions/userVote" }
+    } */
   try {
     const { accountNumber, signature } = req.body;
     const { nonce } = req.body.message;
@@ -118,6 +130,12 @@ const createUserVote = async (req, res) => {
 };
 
 const cancelUserVote = async (req, res) => {
+  /*  #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'allow users to cancel their vote for governers...',
+        required: true,
+        schema: { $ref: "#/definitions/userVote" }
+    } */
   try {
     const { accountNumber } = req.body;
     const userID = req.params.id;

@@ -3,6 +3,12 @@ const jwt = require("jsonwebtoken");
 const generateNonce = require("../utils/generateNonce");
 
 const authUser = async (req, res) => {
+  /*  #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'generate jwt token for authentication.',
+        required: true,
+        schema: { $ref: "#/definitions/authUser" }
+    } */
   try {
     user = req.user;
 

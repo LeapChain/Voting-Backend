@@ -33,6 +33,12 @@ const getPoll = async (req, res) => {
 };
 
 const createPoll = async (req, res) => {
+  /*  #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'create poll and allow users to vote on the choices.',
+        required: true,
+        schema: { $ref: "#/definitions/Poll" }
+    } */
   try {
     const { accountNumber, signature } = req.body;
     const { title, description, url, nonce, choices } = req.body.message;
@@ -58,6 +64,7 @@ const createPoll = async (req, res) => {
 };
 
 const updatePoll = async (req, res) => {
+  // #swagger.ignore = true
   try {
     const { id } = req.params;
     const { voteWeightage, choices, status } = req.body;
