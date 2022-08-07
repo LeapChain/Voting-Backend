@@ -1,0 +1,17 @@
+{
+    "name": "Leapchain Voting API",
+    "description": "The api for leapchain voting service", 
+    "env": [
+        {
+            "key": "MONGO_URI",
+            "description": "URI of your mongo database.",
+            "required": true 
+        },
+        {
+            "key": "JWT_SECRET_KEY",
+            "description": "Secret key for JWT authentication.",
+            "value": "H5i0saYL4EWR3@%dN7wnU@!7e%!ZU6eF",
+            "required": true 
+        }
+    ]
+}
