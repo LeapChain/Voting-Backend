@@ -117,7 +117,22 @@ const createUserVote = async (req, res) => {
   }
 };
 
+const cancelUserVote = async (req, res) => {
+  try {
+    const { accountNumber } = req.body;
+    const userID = req.params.id;
+    Vote.deleteMany({
+      accountNumber: accountNumber,
+      votedTo: userID,
+    });
+    return res.status(200).json("Deleted the vote");
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+
 module.exports = {
   createPollVote,
   createUserVote,
+  cancelUserVote,
 };
