@@ -11,6 +11,12 @@ const {
 } = require("../constants");
 
 const applyForGovernor = async (req, res) => {
+  /*  #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'apply to be a governor...',
+        required: true,
+        schema: { $ref: "#/definitions/governorRequest" }
+    } */
   try {
     const { accountNumber, signature } = req.body;
     const { username, nonce } = req.body.message;
