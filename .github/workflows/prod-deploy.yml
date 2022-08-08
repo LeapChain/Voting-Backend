@@ -22,4 +22,6 @@ jobs:
           # Create .env
           echo "PRODUCTION_MONGO_URI=${{ env.PRODUCTION_MONGO_URI }}" | tee -a .env > /dev/null
           echo "PRODUCTION_JWT_SECRET_KEY=${{ env.PRODUCTION_JWT_SECRET_KEY }}" | tee -a .env > /dev/null
+          # export deta access token to update .env file
+          export DETA_ACCESS_TOKEN=${{ secrets.DETA_ACCESS_TOKEN }}
           ~/.deta/bin/deta update -e .env
