@@ -5,7 +5,7 @@
     "description": "API documentation of Leapchain.",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "",
   "basePath": "/",
   "schemes": [
     "http",
@@ -53,13 +53,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "retrieve the user nonce for signig the requests",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "accountNumber": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/createUser"
             }
           }
         ],
@@ -242,38 +239,11 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "accountNumber": {
-                  "example": "any"
-                },
-                "choices": {
-                  "example": "any"
-                },
-                "signature": {
-                  "example": "any"
-                },
-                "voteWeightage": {
-                  "example": "any"
-                },
-                "status": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
@@ -332,6 +302,15 @@
               "example": 123456
             }
           }
+        }
+      }
+    },
+    "createUser": {
+      "type": "object",
+      "properties": {
+        "accountNumber": {
+          "type": "string",
+          "example": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       }
     },

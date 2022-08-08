@@ -5,6 +5,7 @@ const doc = {
     title: "Leapchain Voting API",
     description: "API documentation of Leapchain.",
   },
+  host: "",
   schemes: ["http", "https"],
   securityDefinitions: {
     jwt: {
@@ -27,6 +28,10 @@ const doc = {
       message: {
         nonce: 123456,
       },
+    },
+    createUser: {
+      accountNumber:
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     },
     governorRequest: {
       accountNumber:
