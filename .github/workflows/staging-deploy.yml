@@ -25,3 +25,4 @@ jobs:
           # export deta access token to update .env file
           export DETA_ACCESS_TOKEN=${{ secrets.DETA_ACCESS_TOKEN }}
           ~/.deta/bin/deta update -e .env
+          ~/.deta/bin/deta visor enable
