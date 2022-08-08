@@ -22,7 +22,7 @@ account_balances = get_all_account_balances()
 def get_account_balance(account_number):
     
     if account_number in account_balances:
-        return account_balances[account_number]['balance']
+        return account_balances[account_number]['balance'] + account_balances[account_number]['locked']
     return 0
 
 def get_user_nonce(account_number):
