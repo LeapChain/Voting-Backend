@@ -1,0 +1,27 @@
+name: Deploy to deta production once pushed to main branch.
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PRODUCTION_MONGO_URI: ${{ secrets.PRODUCTION_MONGO_URI }}
+  PRODUCTION_JWT_SECRET_KEY: ${{ secrets.PRODUCTION_JWT_SECRET_KEY }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: BogDAAAMN/deta-deploy-action@v1.0.1
+        with:
+          deta-access-token: ${{ secrets.DETA_ACCESS_TOKEN }}
+          deta-name: ${{ secrets.PRODUCTION_DETA_MICRO }}
+      - run: |
+          # Create .env
+          echo "PRODUCTION_MONGO_URI=${{ env.PRODUCTION_MONGO_URI }}" | tee -a .env > /dev/null
+          echo "PRODUCTION_JWT_SECRET_KEY=${{ env.PRODUCTION_JWT_SECRET_KEY }}" | tee -a .env > /dev/null
+          # Deploy environment variables
+          export DETA_ACCESS_TOKEN=${{ secrets.DETA_ACCESS_TOKEN }}
+          ~/.deta/bin/deta update -e .env
