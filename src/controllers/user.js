@@ -1,6 +1,12 @@
 const User = require("../models/User");
 
 const createUser = async (req, res) => {
+  /*  #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'retrieve the user nonce for signig the requests',
+        required: true,
+        schema: { $ref: "#/definitions/createUser" }
+    } */
   try {
     const { accountNumber } = req.body;
 
