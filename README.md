@@ -38,4 +38,8 @@ Now navigate to `http://127.0.0.1:3000/` and the server should be running.
 
 [![Deploy](https://button.deta.dev/1/svg)](https://go.deta.dev/deploy?repo=https://github.com/LeapChain/Voting-Backend)
 
-Development Server: https://7nfr0m.deta.dev/
+### Deployed Servers
+
+Staging Server: https://7hy843.deta.dev/
+
+Production Server: https://7nfr0m.deta.dev/
