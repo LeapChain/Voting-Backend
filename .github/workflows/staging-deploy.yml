@@ -6,8 +6,8 @@ on:
       - staging
 
 env:
-  STAGING_MONGO_URI: ${{ secrets.STAGING_MONGO_URI }}
-  STAGING_JWT_SECRET_KEY: ${{ secrets.STAGING_JWT_SECRET_KEY }}
+  MONGO_URI: ${{ secrets.STAGING_MONGO_URI }}
+  JWT_SECRET_KEY: ${{ secrets.STAGING_JWT_SECRET_KEY }}
 
 jobs:
   deploy:
@@ -20,8 +20,8 @@ jobs:
           deta-name: ${{ secrets.STAGING_DETA_MICRO }}
       - run: |
           # Create .env
-          echo "STAGING_MONGO_URI=${{ env.STAGING_MONGO_URI }}" | tee -a .env > /dev/null
-          echo "STAGING_JWT_SECRET_KEY=${{ env.STAGING_JWT_SECRET_KEY }}" | tee -a .env > /dev/null
+          echo "MONGO_URI=${{ env.MONGO_URI }}" | tee -a .env > /dev/null
+          echo "JWT_SECRET_KEY=${{ env.JWT_SECRET_KEY }}" | tee -a .env > /dev/null
           # export deta access token to update .env file
           export DETA_ACCESS_TOKEN=${{ secrets.DETA_ACCESS_TOKEN }}
           ~/.deta/bin/deta update -e .env
