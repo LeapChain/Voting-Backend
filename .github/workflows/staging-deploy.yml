@@ -19,9 +19,7 @@ jobs:
           deta-access-token: ${{ secrets.DETA_ACCESS_TOKEN }}
           deta-name: ${{ secrets.STAGING_DETA_MICRO }}
       - run: |
-          # Create .env
+          # Create .env file
           echo "STAGING_MONGO_URI=${{ env.STAGING_MONGO_URI }}" | tee -a .env > /dev/null
           echo "STAGING_JWT_SECRET_KEY=${{ env.STAGING_JWT_SECRET_KEY }}" | tee -a .env > /dev/null
-          # Deploy environment variables
-          export DETA_ACCESS_TOKEN=${{ secrets.DETA_ACCESS_TOKEN }}
           ~/.deta/bin/deta update -e .env
