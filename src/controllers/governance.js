@@ -11,16 +11,7 @@ const {
 } = require("../constants");
 
 const applyForGovernor = async (req, res) => {
-  /*  #swagger.parameters['body'] = {
-        in: 'body',
-        description: 'apply to be a governor...',
-        required: true,
-        schema: { $ref: "#/definitions/governorRequest" }
-    } */
   try {
-    const { accountNumber, signature } = req.body;
-    const { username, nonce } = req.body.message;
-
     user = req.user;
 
     if (user.type === UserType.GOVERNER) {
@@ -35,33 +26,15 @@ const applyForGovernor = async (req, res) => {
       });
     }
 
-    const isUsernameNotAvailable = await User.exists({
-      username: username,
+    var governorRequest = await GovernorRequest.findOne({
+      accountNumber: user.accountNumber,
     });
 
-    if (isUsernameNotAvailable) {
-      return res.status(400).json({
-        errors: [
-          {
-            msg: "oops, the username is already taken. Please use a new one..",
-            param: "none",
-            location: "none",
-          },
-        ],
+    if (!governorRequest) {
+      var governorRequest = await GovernorRequest.create({
+        accountNumber: user.accountNumber,
       });
     }
-
-    GovernorRequest.deleteMany({
-      accountNumber: accountNumber,
-      paymentStatus: PaymentStatus.PENDING,
-    });
-
-    var governorRequest = await GovernorRequest.create({
-      accountNumber,
-      signature,
-      username,
-      nonce,
-    });
 
     paymentInfo = {
       accountNumber: TREASURY_ACCOUNT_NUMBER,
@@ -71,9 +44,6 @@ const applyForGovernor = async (req, res) => {
 
     governorRequest = governorRequest.toObject();
     governorRequest.paymentInfo = paymentInfo;
-
-    user.nonce = generateNonce();
-    user.save();
 
     return res.json(governorRequest);
   } catch (err) {
