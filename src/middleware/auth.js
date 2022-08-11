@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -14,20 +15,19 @@ const verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, _id) => {
-    if (err) {
-      return res.status(401).json({
-        errors: {},
-        _message: "Authentication Failed.",
-        name: "Unauthenticated",
-        message: "Authentication Failed: Invalid access token.",
-      });
-    }
-
-    req.user = _id;
-
-    return next();
-  });
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const user = await User.findById(payload._id);
+    req.user = user;
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      errors: {},
+      _message: "Authentication Failed.",
+      name: "Unauthenticated",
+      message: "Authentication Failed: Invalid access token.",
+    });
+  }
 };
 
 module.exports = verifyToken;

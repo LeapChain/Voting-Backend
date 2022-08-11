@@ -78,13 +78,9 @@
         "description": "",
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "description": "apply to be a governor...",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/governorRequest"
-            }
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -93,6 +89,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -311,32 +310,6 @@
         "accountNumber": {
           "type": "string",
           "example": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        }
-      }
-    },
-    "governorRequest": {
-      "type": "object",
-      "properties": {
-        "accountNumber": {
-          "type": "string",
-          "example": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        },
-        "signature": {
-          "type": "string",
-          "example": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        },
-        "message": {
-          "type": "object",
-          "properties": {
-            "nonce": {
-              "type": "number",
-              "example": 123456
-            },
-            "username": {
-              "type": "string",
-              "example": "yourusername"
-            }
-          }
         }
       }
     },
