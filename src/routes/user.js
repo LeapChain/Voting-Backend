@@ -10,7 +10,7 @@ const {
 } = require("../middleware/validateRequestSchema");
 const auth = require("../middleware/auth");
 const { validateSignature } = require("../middleware/validateSignature");
-const userExists = require("../middleware/userExists");
+const { userExists } = require("../middleware/user");
 
 const { userCreateSchema } = require("../schema/userSchema");
 const { userVoteSchema } = require("../schema/voteSchema");

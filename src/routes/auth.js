@@ -4,7 +4,7 @@ const { authUser } = require("../controllers/auth");
 const {
   validateRequestSchema,
 } = require("../middleware/validateRequestSchema");
-const userExists = require("../middleware/userExists");
+const { userExists } = require("../middleware/user");
 const { validateSignature } = require("../middleware/validateSignature");
 const { authUserSchema } = require("../schema/userSchema");
 
