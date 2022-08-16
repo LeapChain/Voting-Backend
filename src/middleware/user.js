@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS } = require("../constants");
+const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS, UserType } = require("../constants");
 
 const isAdminAccount = async (req, res, next) => {
   const { accountNumber } = req.body;
@@ -69,8 +69,8 @@ const canChangeUsername = async (req, res, next) => {
       errors: [
         {
           msg: "Validation failed: You can only change username once..",
-          param: "none",
-          location: "none",
+          param: "username",
+          location: "body",
         },
       ],
     });
@@ -78,4 +78,26 @@ const canChangeUsername = async (req, res, next) => {
   next();
 };
 
-module.exports = { isAdminAccount, userExists, canChangeUsername };
+const usernameExists = async (req, res, next) => {
+  const { username } = req.body;
+  const user = await User.findOne({ username });
+  if (user) {
+    return res.json({
+      errors: [
+        {
+          msg: "Validation failed: Username already taken..",
+          param: "username",
+          location: "body",
+        },
+      ],
+    });
+  }
+  next();
+};
+
+module.exports = {
+  isAdminAccount,
+  userExists,
+  canChangeUsername,
+  usernameExists,
+};
