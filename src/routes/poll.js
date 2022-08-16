@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const isAdminAccount = require("../middleware/isAdminAccount");
+const { isAdminAccount, userExists } = require("../middleware/user");
 const { PollSchema } = require("../schema/pollSchema");
 const { pollVoteSchema } = require("../schema/voteSchema");
 const {
   validateRequestSchema,
 } = require("../middleware/validateRequestSchema");
 const { validateSignature } = require("../middleware/validateSignature");
-const userExists = require("../middleware/userExists");
 
 const {
   getAllPoll,

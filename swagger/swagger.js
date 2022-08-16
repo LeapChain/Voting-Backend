@@ -33,6 +33,9 @@ const doc = {
       accountNumber:
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     },
+    changeUsername: {
+      username: "username",
+    },
     Poll: {
       accountNumber:
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
