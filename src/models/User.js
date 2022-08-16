@@ -19,6 +19,10 @@ const UserSchema = new mongoose.Schema(
       default: UserType.GENERAL,
     },
     username: String,
+    usernameChanged: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

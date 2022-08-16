@@ -51,4 +51,31 @@ const userExists = async (req, res, next) => {
   next();
 };
 
-module.exports = { isAdminAccount, userExists };
+const canChangeUsername = async (req, res, next) => {
+  user = req.user;
+
+  if (user.type != UserType.GOVERNER) {
+    return res.json({
+      errors: [
+        {
+          msg: "Validation failed: You need to be a governer to change username..",
+          param: "none",
+          location: "none",
+        },
+      ],
+    });
+  } else if (user.usernameChanged) {
+    return res.json({
+      errors: [
+        {
+          msg: "Validation failed: You can only change username once..",
+          param: "none",
+          location: "none",
+        },
+      ],
+    });
+  }
+  next();
+};
+
+module.exports = { isAdminAccount, userExists, canChangeUsername };
