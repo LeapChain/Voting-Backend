@@ -19,7 +19,7 @@ const verifyToken = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const user = await User.findById(payload._id);
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         errors: [
           {
             msg: "User validation failed: User associated with that JWT does not exist..",
