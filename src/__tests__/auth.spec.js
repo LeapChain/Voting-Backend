@@ -3,9 +3,8 @@ const getOrCreateUser = require("../utils/getOrCreateUser");
 const request = require("supertest");
 const app = require("../../index");
 const db = require("../db/testDb");
-const User = require("../models/user");
 
-let secretKey, publicKey, user, nonce;
+let secretKey, publicKey;
 
 beforeAll(async () => {
   await db.connect();
@@ -76,7 +75,7 @@ describe("POST /api/v1/auth", () => {
   });
 
   it("should return 400 bad request if invalid signature", async () => {
-    const user = await getOrCreateUser(publicKey);
+    await getOrCreateUser(publicKey);
     const res = await request(app)
       .post("/api/v1/auth")
       .send({

@@ -1,10 +1,7 @@
 const GovernorRequest = require("../models/GovernorRequest");
-const User = require("../models/User");
 
-const generateNonce = require("../utils/generateNonce");
 const {
   UserType,
-  PaymentStatus,
   MemoType,
   GOVERNOR_REQUEST_FEE,
   TREASURY_ACCOUNT_NUMBER,
