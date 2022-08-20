@@ -8,7 +8,7 @@ const isAdminAccount = async (req, res, next) => {
     const user = await User.findOne({ accountNumber });
 
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         errors: [
           {
             msg: "User validation failed: User associated with `accountNumber` does not exist..",
@@ -37,7 +37,7 @@ const userExists = async (req, res, next) => {
   const user = await User.findOne({ accountNumber: req.body.accountNumber });
 
   if (!user) {
-    return res.json({
+    return res.status(404).json({
       errors: [
         {
           msg: "User validation failed: User associated with `accountNumber` does not exist..",
