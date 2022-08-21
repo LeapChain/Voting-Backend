@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { JWT_SECRET_KEY } = require("../constants");
 
 const verifyToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -12,7 +13,7 @@ const verifyToken = async (req, res, next) => {
   }
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const payload = jwt.verify(token, JWT_SECRET_KEY);
     const user = await User.findById(payload._id);
     if (!user) {
       return res.status(404).json({
