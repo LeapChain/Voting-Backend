@@ -12,14 +12,8 @@ const applyForGovernor = async (req, res) => {
     user = req.user;
 
     if (user.type === UserType.GOVERNER) {
-      return res.status(400).json({
-        errors: [
-          {
-            msg: "oops, you are already a governor. Why applying again??",
-            param: "none",
-            location: "none",
-          },
-        ],
+      return res.status(403).json({
+        msg: "user with type governer can not apply to be a governer",
       });
     }
 

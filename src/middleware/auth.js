@@ -7,11 +7,7 @@ const verifyToken = async (req, res, next) => {
 
   if (token == null) {
     return res.status(401).json({
-      errors: {},
-      _message: "Authentication Failed.",
-      name: "Unauthenticated",
-      message:
-        "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
+      msg: "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
     });
   }
 
@@ -33,10 +29,7 @@ const verifyToken = async (req, res, next) => {
     next();
   } catch (err) {
     return res.status(401).json({
-      errors: {},
-      _message: "Authentication Failed.",
-      name: "Unauthenticated",
-      message: "Authentication Failed: Invalid access token.",
+      msg: "Authentication Failed: Invalid access token.",
     });
   }
 };
