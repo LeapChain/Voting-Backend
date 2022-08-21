@@ -9,9 +9,9 @@ let secretKey, publicKey;
 beforeAll(async () => {
   await db.connect();
   secretKey =
-    "705a3b36b44c2e95eebba870dc6fe5280c5c72783e2fe9449ebb73556faec57e";
+    "0000000000000000000000000000000000000000000000000000000000000000";
   publicKey =
-    "a5f0766103d33981ca0e90179fbd7ece2c9e76e0ea5d99ebb86cb80ff3c99ab9";
+    "3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29";
 });
 beforeEach(async () => {
   await db.clear();
