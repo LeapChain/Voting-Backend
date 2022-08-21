@@ -20,13 +20,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: create env file
+        run: |
+          touch .env
+          echo MONGO_URI=${{ secrets.STAGING_MONGO_URI }} >> .env
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-        env:
-          MONGO_URI: ${{ secrets.STAGING_MONGO_URI }}
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
