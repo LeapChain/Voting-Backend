@@ -50,6 +50,7 @@ describe("POST /api/v1/auth", () => {
         signature: "",
       })
       .set("Accept", "application/json");
+
     expect(res.statusCode).toEqual(400);
     expect(res.body).toHaveProperty("errors");
     expect(res.body).toEqual(

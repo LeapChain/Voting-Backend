@@ -29,6 +29,13 @@ const generateUserJWT = async () => {
   return { accessToken: accessToken, userId: user._id };
 };
 
+const generateBlankJWT = async () => {
+  const accessToken = jwt.sign({}, JWT_SECRET_KEY, {
+    expiresIn: "30d",
+  });
+  return { accessToken: accessToken };
+};
+
 const generateGovernorJWT = async () => {
   const user = await getOrCreateUser(publicKey);
   user.type = "GOVERNER";
@@ -100,6 +107,24 @@ describe("POST /api/v1/users/apply", () => {
     expect(res.body).toEqual(
       expect.objectContaining({
         msg: "Authentication Failed: Invalid access token.",
+      })
+    );
+  });
+
+  it("should return 404 if user matching JWT not found", async () => {
+    const { accessToken } = await generateBlankJWT();
+    const res = await request(app)
+      .post("/api/v1/users/apply")
+      .send({
+        accountNumber: publicKey,
+      })
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${accessToken}`);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        msg: "User validation failed: User associated with that JWT does not exist.",
       })
     );
   });
