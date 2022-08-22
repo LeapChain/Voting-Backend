@@ -1,12 +1,13 @@
 const request = require("supertest");
 const app = require("../../index");
 const db = require("../db/testDb");
-const { createSignature } = require("@leapchain/dleap");
+const jwt = require("jsonwebtoken");
 const getOrCreateUser = require("../utils/getOrCreateUser");
 const {
   GOVERNOR_REQUEST_FEE,
   TREASURY_ACCOUNT_NUMBER,
   MemoType,
+  JWT_SECRET_KEY,
 } = require("../constants");
 
 beforeAll(async () => {
@@ -21,44 +22,20 @@ afterAll(async () => await db.close());
 
 const generateUserJWT = async () => {
   const user = await getOrCreateUser(publicKey);
-  const message = {
-    nonce: user.nonce,
-  };
-  const signature = createSignature(JSON.stringify(message), secretKey);
-
-  const res = await request(app)
-    .post("/api/v1/auth")
-    .send({
-      accountNumber: publicKey,
-      message: {
-        nonce: user.nonce,
-      },
-      signature: signature,
-    })
-    .set("Accept", "application/json");
-  return { accessToken: res.body.accessToken, userId: user._id };
+  const accessToken = jwt.sign({ _id: user._id }, JWT_SECRET_KEY, {
+    expiresIn: "30d",
+  });
+  return { accessToken: accessToken, userId: user._id };
 };
 
 const generateGovernorJWT = async () => {
   const user = await getOrCreateUser(publicKey);
   user.type = "GOVERNER";
   user.save();
-  const message = {
-    nonce: user.nonce,
-  };
-  const signature = createSignature(JSON.stringify(message), secretKey);
-
-  const res = await request(app)
-    .post("/api/v1/auth")
-    .send({
-      accountNumber: publicKey,
-      message: {
-        nonce: user.nonce,
-      },
-      signature: signature,
-    })
-    .set("Accept", "application/json");
-  return { accessToken: res.body.accessToken };
+  const accessToken = jwt.sign({ _id: user._id }, JWT_SECRET_KEY, {
+    expiresIn: "30d",
+  });
+  return { accessToken: accessToken };
 };
 
 describe("POST /api/v1/users/create", () => {
