@@ -1,14 +1,15 @@
 const request = require("supertest");
-const app = require("../../index");
-const db = require("../db/testDb");
 const jwt = require("jsonwebtoken");
-const getOrCreateUser = require("../utils/getOrCreateUser");
+
+const getOrCreateUser = require("../../src/utils/getOrCreateUser");
+const app = require("../../index");
+const db = require("../../src/db/testDb");
 const {
   GOVERNOR_REQUEST_FEE,
   TREASURY_ACCOUNT_NUMBER,
   MemoType,
   JWT_SECRET_KEY,
-} = require("../constants");
+} = require("../../src/constants");
 
 beforeAll(async () => {
   await db.connect();

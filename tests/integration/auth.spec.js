@@ -1,8 +1,9 @@
 const { createSignature } = require("@leapchain/dleap");
-const getOrCreateUser = require("../utils/getOrCreateUser");
 const request = require("supertest");
+
 const app = require("../../index");
-const db = require("../db/testDb");
+const getOrCreateUser = require("../../src/utils/getOrCreateUser");
+const db = require("../../src/db/testDb");
 
 let secretKey, publicKey;
 
