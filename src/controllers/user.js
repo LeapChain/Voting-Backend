@@ -30,10 +30,6 @@ const changeUsername = async (req, res) => {
     const { username } = req.body;
     user = req.user;
 
-    if (user.usernameChanged) {
-      return res.status(400).json({ msg: "Username already changed" });
-    }
-
     updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
       { username: username, usernameChanged: true },

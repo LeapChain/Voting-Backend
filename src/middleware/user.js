@@ -55,24 +55,12 @@ const canChangeUsername = async (req, res, next) => {
   user = req.user;
 
   if (user.type != UserType.GOVERNER) {
-    return res.json({
-      errors: [
-        {
-          msg: "Validation failed: You need to be a governer to change username..",
-          param: "none",
-          location: "none",
-        },
-      ],
+    return res.status(403).json({
+      msg: "user type GOVERNOR is required to change the username.",
     });
   } else if (user.usernameChanged) {
-    return res.json({
-      errors: [
-        {
-          msg: "Validation failed: You can only change username once..",
-          param: "username",
-          location: "body",
-        },
-      ],
+    return res.status(403).json({
+      msg: "Username can only be changed once.",
     });
   }
   next();
@@ -82,14 +70,8 @@ const usernameExists = async (req, res, next) => {
   const { username } = req.body;
   const user = await User.findOne({ username });
   if (user) {
-    return res.json({
-      errors: [
-        {
-          msg: "Validation failed: Username already taken..",
-          param: "username",
-          location: "body",
-        },
-      ],
+    return res.status(409).json({
+      msg: "Username is already taken.",
     });
   }
   next();

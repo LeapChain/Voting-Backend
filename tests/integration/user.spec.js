@@ -46,6 +46,32 @@ const generateGovernorJWT = async () => {
   return { accessToken: accessToken };
 };
 
+const generateGovernorWithChangedUsernameJWT = async () => {
+  const user = await getOrCreateUser(publicKey);
+  user.type = "GOVERNER";
+  user.usernameChanged = true;
+  user.save();
+  const accessToken = jwt.sign({ _id: user._id }, JWT_SECRET_KEY, {
+    expiresIn: "30d",
+  });
+  return { accessToken: accessToken };
+};
+
+const generateGovernorWithDuplicateUsernameJWT = async () => {
+  const user = await getOrCreateUser(publicKey);
+  user.type = "GOVERNER";
+  user.save();
+
+  const duplicatedUser = await getOrCreateUser(secretKey);
+  duplicatedUser.username = "duplicateUsername";
+  duplicatedUser.save();
+
+  const accessToken = jwt.sign({ _id: user._id }, JWT_SECRET_KEY, {
+    expiresIn: "30d",
+  });
+  return { accessToken: accessToken };
+};
+
 describe("POST /api/v1/users/create", () => {
   it("should return account number and nonce for valid request", async () => {
     const res = await request(app)
@@ -167,5 +193,171 @@ describe("POST /api/v1/users/apply", () => {
         }),
       })
     );
+  });
+});
+
+describe("POST /api/v1/users/change-username", () => {
+  it("should check if the no authorization token passed", async () => {
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send()
+      .set("Accept", "application/json");
+    expect(res.statusCode).toEqual(401);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        msg: "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
+      })
+    );
+  });
+
+  it("should return 401 if invalid JWT token passed", async () => {
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send()
+      .set("Accept", "application/json")
+      .set("Authorization", "Bearer JWT");
+    expect(res.statusCode).toEqual(401);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        msg: "Authentication Failed: Invalid access token.",
+      })
+    );
+  });
+
+  it("should return 404 if user matching JWT not found", async () => {
+    const { accessToken } = await generateBlankJWT();
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send({
+        username: "testuser",
+      })
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${accessToken}`);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        msg: "User validation failed: User associated with that JWT does not exist.",
+      })
+    );
+  });
+
+  it("should return 400 if username length is invalid", async () => {
+    const { accessToken } = await generateUserJWT();
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send({
+        username: "a",
+      })
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${accessToken}`);
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        errors: expect.arrayContaining([
+          expect.objectContaining({
+            msg: "username must be between 3-32 character long.",
+            param: "username",
+            location: "body",
+          }),
+        ]),
+      })
+    );
+  });
+
+  it("should return 400 if username contains invalid characters", async () => {
+    const { accessToken } = await generateUserJWT();
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send({
+        username: "a!@#",
+      })
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${accessToken}`);
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        errors: expect.arrayContaining([
+          expect.objectContaining({
+            msg: "username can only contain alphanumeric and - characters.",
+            param: "username",
+            location: "body",
+          }),
+        ]),
+      })
+    );
+  });
+
+  it("should return 409 if username is taken", async () => {
+    const { accessToken } = await generateGovernorWithDuplicateUsernameJWT();
+
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send({
+        username: "duplicateUsername",
+      })
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${accessToken}`);
+
+    expect(res.statusCode).toEqual(409);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        msg: "Username is already taken.",
+      })
+    );
+  });
+
+  it("should return 403 if user is not governer", async () => {
+    const { accessToken } = await generateUserJWT();
+
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send({
+        username: "testuser1",
+      })
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${accessToken}`);
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        msg: "user type GOVERNOR is required to change the username.",
+      })
+    );
+  });
+
+  it("should return 403 if username is already changed", async () => {
+    const { accessToken } = await generateGovernorWithChangedUsernameJWT();
+
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send({ username: "testuser1" })
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${accessToken}`);
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body).toEqual(
+      expect.objectContaining({ msg: "Username can only be changed once." })
+    );
+  });
+
+  it("should return 200 for a valid request", async () => {
+    const { accessToken } = await generateGovernorJWT();
+    const res = await request(app)
+      .post("/api/v1/users/change-username")
+      .send({ username: "testuser1" })
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${accessToken}`);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty("accountNumber");
+    expect(res.body).toHaveProperty("type");
+    expect(res.body).toHaveProperty("username");
+    expect(res.body).toHaveProperty("usernameChanged");
+
+    expect(res.body.username).toBe("testuser1");
+    expect(res.body.usernameChanged).toBe(true);
   });
 });
