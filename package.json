@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon -L server.js",
-    "test": "jest --",
+    "test": "jest --coverage",
     "swagger-autogen": "node swagger.js"
   },
   "repository": {
