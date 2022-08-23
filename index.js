@@ -1,5 +1,9 @@
 require("dotenv").config();
-require("./src/db/connect");
+
+if (process.env.NODE_ENV !== "test") {
+  require("./src/db/connect");
+}
+
 const express = require("express");
 const app = express();
 const morgan = require("morgan");

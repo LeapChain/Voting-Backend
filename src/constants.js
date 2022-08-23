@@ -4,8 +4,14 @@ WHITELISTEAD_POLL_ACCOUNT_NUMBERS = [
   "dfb24138584042044305f9417e4fe02ca4bde604da6cb2e211a825a2ab5a4e3c", // mrsky's wallet
 ];
 
+if (process.env.NODE_ENV === "test") {
+  JWT_SECRET_KEY = "test";
+} else {
+  JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+}
+
 MAX_GOVERNANCE_VOTE_PER_ACCOUNT = 3;
-GOVERNOR_REQUEST_FEE = 2000;
+GOVERNOR_REQUEST_FEE = 10000;
 TREASURY_ACCOUNT_NUMBER =
   "dfb24138584042044305f9417e4fe02ca4bde604da6cb2e211a825a2ab5a4e3c"; // todo: add real treasury account number
 
@@ -45,4 +51,5 @@ module.exports = {
   VoteType,
   PaymentStatus,
   MemoType,
+  JWT_SECRET_KEY,
 };
