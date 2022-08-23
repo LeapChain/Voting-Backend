@@ -12,9 +12,11 @@ const changeUsernameSchema = [
     var usernameRegex = /^[a-zA-Z0-9\-]+$/;
 
     if (!usernameRegex.test(value)) {
-      throw new Error("username can only contain alphanumeric and -..");
+      throw new Error(
+        "username can only contain alphanumeric and - characters."
+      );
     } else if (value && (value.length < 3 || value.length > 32)) {
-      throw new Error("username must be between 3-32 character long..");
+      throw new Error("username must be between 3-32 character long.");
     }
     return true;
   }),
