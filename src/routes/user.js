@@ -31,8 +31,8 @@ router.post(
   auth,
   changeUsernameSchema,
   validateRequestSchema,
-  canChangeUsername,
   usernameExists,
+  canChangeUsername,
   changeUsername
 );
 
