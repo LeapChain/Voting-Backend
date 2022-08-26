@@ -17,6 +17,7 @@ const TransactionSchema = mongoose.Schema(
       enum: ["WAITING_CONFIRMATION", "CONFIRMED"],
       default: "WAITING_CONFIRMATION",
     },
+    remarks: String,
   },
   {
     timestamps: true,
