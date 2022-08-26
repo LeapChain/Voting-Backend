@@ -91,7 +91,7 @@ const processTransactions = async () => {
 
       if (user) {
         if (confirmedTransaction.amount >= GOVERNOR_REQUEST_FEE) {
-          User.findOneAndUpdate({ _id: userId }, { type: UserType.GOVERNER });
+          await User.updateOne({ _id: userId }, { type: UserType.GOVERNER });
 
           const governorRequest = await GovernorRequest.findOne({
             accountNumber: user.accountNumber,
