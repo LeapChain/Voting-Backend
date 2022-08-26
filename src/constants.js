@@ -27,7 +27,7 @@ const PollStatus = {
 
 const UserType = {
   GENERAL: "GENERAL",
-  GOVERNER: "GOVERNER",
+  GOVERNOR: "GOVERNOR",
 };
 
 const VoteType = {
