@@ -15,10 +15,12 @@ const governorRequestSchema = mongoose.Schema(
       enum: PaymentStatus,
       default: PaymentStatus.PENDING,
     },
-    transaction: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Transaction",
-    },
+    transactions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Transaction",
+      },
+    ],
   },
   {
     timestamps: true,
