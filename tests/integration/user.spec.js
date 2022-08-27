@@ -38,7 +38,7 @@ const generateBlankJWT = async () => {
 
 const generateGovernorJWT = async () => {
   const user = await getOrCreateUser(publicKey);
-  user.type = "GOVERNER";
+  user.type = "GOVERNOR";
   user.save();
   const accessToken = jwt.sign({ _id: user._id }, JWT_SECRET_KEY, {
     expiresIn: "30d",
@@ -48,7 +48,7 @@ const generateGovernorJWT = async () => {
 
 const generateGovernorWithChangedUsernameJWT = async () => {
   const user = await getOrCreateUser(publicKey);
-  user.type = "GOVERNER";
+  user.type = "GOVERNOR";
   user.usernameChanged = true;
   user.save();
   const accessToken = jwt.sign({ _id: user._id }, JWT_SECRET_KEY, {
@@ -59,7 +59,7 @@ const generateGovernorWithChangedUsernameJWT = async () => {
 
 const generateGovernorWithDuplicateUsernameJWT = async () => {
   const user = await getOrCreateUser(publicKey);
-  user.type = "GOVERNER";
+  user.type = "GOVERNOR";
   user.save();
 
   const duplicatedUser = await getOrCreateUser(secretKey);
@@ -167,7 +167,7 @@ describe("POST /api/v1/users/apply", () => {
     expect(res.statusCode).toEqual(403);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "user with type governer can not apply to be a governer",
+        msg: "user with type governor can not apply to be a governor",
       })
     );
   });
@@ -309,7 +309,7 @@ describe("POST /api/v1/users/change-username", () => {
     );
   });
 
-  it("should return 403 if user is not governer", async () => {
+  it("should return 403 if user is not governor", async () => {
     const { accessToken } = await generateUserJWT();
 
     const res = await request(app)

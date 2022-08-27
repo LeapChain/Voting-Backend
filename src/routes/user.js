@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const { createUser, changeUsername } = require("../controllers/user");
+const {
+  createUser,
+  changeUsername,
+  listGoverners,
+} = require("../controllers/user");
 const { createUserVote, cancelUserVote } = require("../controllers/vote");
 const { applyForGovernor } = require("../controllers/governance");
 
@@ -14,6 +18,7 @@ const {
   userExists,
   usernameExists,
   canChangeUsername,
+  isCandidateGovernor,
 } = require("../middleware/user");
 
 const {
@@ -25,6 +30,8 @@ const { userVoteSchema } = require("../schema/voteSchema");
 router.post("/create", userCreateSchema, validateRequestSchema, createUser);
 
 router.post("/apply", auth, applyForGovernor);
+
+router.get("/governors", auth, listGoverners);
 
 router.post(
   "/change-username",
@@ -42,6 +49,7 @@ router.post(
   validateRequestSchema,
   userExists,
   validateSignature,
+  isCandidateGovernor,
   createUserVote
 );
 

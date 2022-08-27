@@ -11,9 +11,9 @@ const applyForGovernor = async (req, res) => {
   try {
     user = req.user;
 
-    if (user.type === UserType.GOVERNER) {
+    if (user.type === UserType.GOVERNOR) {
       return res.status(403).json({
-        msg: "user with type governer can not apply to be a governer",
+        msg: "user with type governor can not apply to be a governor",
       });
     }
 
