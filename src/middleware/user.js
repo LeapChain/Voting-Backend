@@ -54,7 +54,7 @@ const userExists = async (req, res, next) => {
 const canChangeUsername = async (req, res, next) => {
   user = req.user;
 
-  if (user.type != UserType.GOVERNER) {
+  if (user.type != UserType.GOVERNOR) {
     return res.status(403).json({
       msg: "user type GOVERNOR is required to change the username.",
     });
@@ -77,9 +77,26 @@ const usernameExists = async (req, res, next) => {
   next();
 };
 
+const isCandidateGovernor = async (req, res, next) => {
+  const userID = req.params.id;
+
+  const userIsGoverner = await User.find({
+    type: UserType.GOVERNOR,
+    _id: userID,
+  });
+
+  if (userIsGoverner.length === 0) {
+    return res.status(403).json({
+      msg: "the user is not GOVERNOR and cannot be voted.",
+    });
+  }
+  next();
+};
+
 module.exports = {
   isAdminAccount,
   userExists,
   canChangeUsername,
   usernameExists,
+  isCandidateGovernor,
 };

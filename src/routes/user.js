@@ -18,7 +18,7 @@ const {
   userExists,
   usernameExists,
   canChangeUsername,
-  isGovernor,
+  isCandidateGovernor,
 } = require("../middleware/user");
 
 const {
@@ -49,7 +49,7 @@ router.post(
   validateRequestSchema,
   userExists,
   validateSignature,
-  isGovernor,
+  isCandidateGovernor,
   createUserVote
 );
 
