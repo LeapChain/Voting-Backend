@@ -1,11 +1,13 @@
 const User = require("../models/User");
+const generateNonce = require("../utils/generateNonce");
 
 const getOrCreateUser = async (accountNumber) => {
-  var user = await User.findOne({ accountNumber: accountNumber }).lean();
+  const user = await User.findOneAndUpdate(
+    { accountNumber },
+    { $setOnInsert: { accountNumber, nonce: generateNonce() } },
+    { upsert: true, new: true }
+  );
 
-  if (!user) {
-    user = await User.create({ accountNumber });
-  }
   return user;
 };
 
