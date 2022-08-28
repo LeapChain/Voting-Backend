@@ -1,5 +1,9 @@
 const User = require("../models/User");
-const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS, UserType } = require("../constants");
+const {
+  WHITELISTEAD_POLL_ACCOUNT_NUMBERS,
+  UserType,
+  GOVERNANCE_SIZE,
+} = require("../constants");
 
 const isAdminAccount = async (req, res, next) => {
   const { accountNumber } = req.body;
@@ -95,10 +99,28 @@ const isCandidateGovernor = async (req, res, next) => {
   next();
 };
 
+const isOnGovernance = async (req, res, next) => {
+  const { accountNumber } = req.body;
+
+  const governors = await User.find({ type: UserType.GOVERNOR })
+    .sort("field -totalVotes")
+    .limit(GOVERNANCE_SIZE)
+    .lean();
+
+  if (!governors.some((governor) => governor.accountNumber === accountNumber)) {
+    return res.status(403).json({
+      message: "User is not on governance.",
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   isAdminAccount,
   userExists,
   canChangeUsername,
   usernameExists,
   isCandidateGovernor,
+  isOnGovernance,
 };
