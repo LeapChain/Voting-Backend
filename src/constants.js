@@ -16,7 +16,7 @@ TREASURY_ACCOUNT_NUMBER =
   "dfb24138584042044305f9417e4fe02ca4bde604da6cb2e211a825a2ab5a4e3c"; // todo: add real treasury account number
 
 const MemoType = {
-  GOVERNER_REQUEST: "GOVERNERREQUEST",
+  GOVERNOR_REQUEST: "GOVERNORREQUEST",
 };
 
 const PollStatus = {
@@ -41,6 +41,9 @@ const PaymentStatus = {
   CANCELLED: "CANCELLED",
 };
 
+LEAPCHAIN_BALANCE_API_URL =
+  "https://raw.githubusercontent.com/LeapChain/Account-Backups/master/latest_backup/latest.json";
+
 module.exports = {
   WHITELISTEAD_POLL_ACCOUNT_NUMBERS,
   MAX_GOVERNANCE_VOTE_PER_ACCOUNT,
@@ -52,4 +55,5 @@ module.exports = {
   PaymentStatus,
   MemoType,
   JWT_SECRET_KEY,
+  LEAPCHAIN_BALANCE_API_URL,
 };
