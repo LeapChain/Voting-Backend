@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { isAdminAccount, userExists } = require("../middleware/user");
+const {
+  isAdminAccount,
+  userExists,
+  isOnGovernance,
+} = require("../middleware/user");
 const { PollSchema } = require("../schema/pollSchema");
 const { pollVoteSchema } = require("../schema/voteSchema");
 const {
@@ -22,8 +26,8 @@ router.post(
   "/",
   PollSchema,
   validateRequestSchema,
-  isAdminAccount,
   validateSignature,
+  isOnGovernance,
   createPoll
 );
 

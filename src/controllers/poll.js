@@ -1,5 +1,6 @@
 const Poll = require("../models/Poll");
 const Vote = require("../models/Vote");
+const User = require("../models/User");
 const generateNonce = require("../utils/generateNonce");
 const { verifySignature } = require("@leapchain/dleap");
 
@@ -53,7 +54,7 @@ const createPoll = async (req, res) => {
       signature,
     });
 
-    user = req.user;
+    const user = await User.findOne({ accountNumber });
     user.nonce = generateNonce();
     user.save();
 
