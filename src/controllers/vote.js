@@ -21,19 +21,20 @@ const createPollVote = async (req, res) => {
     const isActivePoll = await Poll.exists({ status: 0, _id: pollID });
 
     if (isActivePoll) {
-      Vote.deleteMany({
-        accountNumber: accountNumber,
-        poll: pollID,
-      });
-
-      const vote = await Vote.create({
-        accountNumber,
-        signature,
-        nonce,
-        poll: pollID,
-        choices,
-        type: VoteType.POLL,
-      });
+      const vote = await Vote.findOneAndUpdate(
+        { accountNumber: accountNumber, poll: pollID },
+        {
+          $setOnInsert: {
+            accountNumber,
+            signature,
+            nonce,
+            poll: pollID,
+            choices,
+            type: VoteType.POLL,
+          },
+        },
+        { upsert: true, new: true }
+      );
 
       user = req.user;
       user.nonce = generateNonce();
@@ -41,14 +42,8 @@ const createPollVote = async (req, res) => {
 
       return res.json(vote);
     } else {
-      return res.status(400).json({
-        errors: [
-          {
-            message: "The poll is not active anymore to cast the votes..",
-            param: "id",
-            location: "param",
-          },
-        ],
+      return res.status(403).json({
+        message: "poll not eligible to vote on",
       });
     }
   } catch (err) {
