@@ -48,7 +48,7 @@ const listGoverners = async (req, res) => {
     const governors = await User.find(
       { type: UserType.GOVERNOR },
       "-nonce -usernameChanged"
-    );
+    ).sort("field -totalVotes");
 
     return res.json(governors);
   } catch (err) {
