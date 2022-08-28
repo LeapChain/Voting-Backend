@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    totalVotes: Number,
   },
   {
     timestamps: true,

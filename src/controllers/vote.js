@@ -1,14 +1,10 @@
 const Vote = require("../models/Vote");
 const Poll = require("../models/Poll");
-const User = require("../models/User");
 
 const generateNonce = require("../utils/generateNonce");
+const { syncUserVotes } = require("../utils/syncVote");
 
-const {
-  MAX_GOVERNANCE_VOTE_PER_ACCOUNT,
-  VoteType,
-  UserType,
-} = require("../constants");
+const { MAX_GOVERNANCE_VOTE_PER_ACCOUNT, VoteType } = require("../constants");
 
 const createPollVote = async (req, res) => {
   /*  #swagger.parameters['body'] = {
@@ -63,7 +59,7 @@ const createPollVote = async (req, res) => {
 const createUserVote = async (req, res) => {
   /*  #swagger.parameters['body'] = {
         in: 'body',
-        description: 'allow users to vote for governers...',
+        description: 'allow users to vote for governors...',
         required: true,
         schema: { $ref: "#/definitions/userVote" }
     } */
@@ -101,6 +97,8 @@ const createUserVote = async (req, res) => {
       user.nonce = generateNonce();
       user.save();
 
+      syncUserVotes();
+
       return res.json(vote);
     }
   } catch (err) {
@@ -111,7 +109,7 @@ const createUserVote = async (req, res) => {
 const cancelUserVote = async (req, res) => {
   /*  #swagger.parameters['body'] = {
         in: 'body',
-        description: 'allow users to cancel their vote for governers...',
+        description: 'allow users to cancel their vote for governors...',
         required: true,
         schema: { $ref: "#/definitions/userVote" }
     } */
@@ -119,16 +117,9 @@ const cancelUserVote = async (req, res) => {
     const { accountNumber } = req.body;
     const userID = req.params.id;
 
-    Vote.findOneAndDelete(
-      { accountNumber: accountNumber, votedTo: userID },
-      function (err, docs) {
-        if (err) {
-          return res.status(500).json(err);
-        } else {
-          return res.status(200).json(docs);
-        }
-      }
-    );
+    await Vote.deleteOne({ accountNumber: accountNumber, votedTo: userID });
+    syncUserVotes();
+    return res.json({ message: "Vote cancelled successfully.." });
   } catch (err) {
     return res.status(500).json(err);
   }
