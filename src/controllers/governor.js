@@ -1,4 +1,5 @@
 const GovernorRequest = require("../models/GovernorRequest");
+const User = require("../models/User");
 
 const {
   UserType,
@@ -42,4 +43,17 @@ const applyForGovernor = async (req, res) => {
   }
 };
 
-module.exports = { applyForGovernor };
+const listGoverners = async (req, res) => {
+  try {
+    const governors = await User.find(
+      { type: UserType.GOVERNOR },
+      "-nonce -usernameChanged"
+    );
+
+    return res.json(governors);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+
+module.exports = { applyForGovernor, listGoverners };

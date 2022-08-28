@@ -99,7 +99,7 @@ describe("POST /api/v1/users/create", () => {
       expect.objectContaining({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            message: "accountNumber must be 64 character long..",
+            msg: "accountNumber must be 64 character long..",
             param: "accountNumber",
             location: "body",
           }),
@@ -112,7 +112,7 @@ describe("POST /api/v1/users/create", () => {
 describe("POST /api/v1/users/apply", () => {
   it("should check if the no authorization token passed", async () => {
     const res = await request(app)
-      .post("/api/v1/users/apply")
+      .post("/api/v1/governors/apply")
       .send()
       .set("Accept", "application/json");
     expect(res.statusCode).toEqual(401);
@@ -126,7 +126,7 @@ describe("POST /api/v1/users/apply", () => {
 
   it("should check if the valid JWT token passed", async () => {
     const res = await request(app)
-      .post("/api/v1/users/apply")
+      .post("/api/v1/governors/apply")
       .send()
       .set("Accept", "application/json")
       .set("Authorization", "Bearer JWT");
@@ -141,7 +141,7 @@ describe("POST /api/v1/users/apply", () => {
   it("should return 404 if user matching JWT not found", async () => {
     const { accessToken } = await generateBlankJWT();
     const res = await request(app)
-      .post("/api/v1/users/apply")
+      .post("/api/v1/governors/apply")
       .send({
         accountNumber: publicKey,
       })
@@ -160,7 +160,7 @@ describe("POST /api/v1/users/apply", () => {
   it("should return 403 if the user is already a governor", async () => {
     const { accessToken } = await generateGovernorJWT();
     const res = await request(app)
-      .post("/api/v1/users/apply")
+      .post("/api/v1/governors/apply")
       .send({
         accountNumber: publicKey,
       })
@@ -177,7 +177,7 @@ describe("POST /api/v1/users/apply", () => {
   it("should return payment info for valid request", async () => {
     const { accessToken, userId } = await generateUserJWT();
     const res = await request(app)
-      .post("/api/v1/users/apply")
+      .post("/api/v1/governors/apply")
       .send({
         accountNumber: publicKey,
       })
@@ -261,7 +261,7 @@ describe("POST /api/v1/users/change-username", () => {
       expect.objectContaining({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            message: "username must be between 3-32 character long.",
+            msg: "username must be between 3-32 character long.",
             param: "username",
             location: "body",
           }),
@@ -285,7 +285,7 @@ describe("POST /api/v1/users/change-username", () => {
       expect.objectContaining({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            message: "username can only contain alphanumeric and - characters.",
+            msg: "username can only contain alphanumeric and - characters.",
             param: "username",
             location: "body",
           }),
