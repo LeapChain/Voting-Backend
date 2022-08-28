@@ -1,4 +1,5 @@
 const GovernorRequest = require("../models/GovernorRequest");
+const User = require("../models/User");
 
 const {
   UserType,
@@ -13,7 +14,7 @@ const applyForGovernor = async (req, res) => {
 
     if (user.type === UserType.GOVERNOR) {
       return res.status(403).json({
-        msg: "user with type governor can not apply to be a governor",
+        message: "user with type governor can not apply to be a governor",
       });
     }
 
@@ -29,7 +30,7 @@ const applyForGovernor = async (req, res) => {
 
     paymentInfo = {
       accountNumber: TREASURY_ACCOUNT_NUMBER,
-      metadata: `${MemoType.GOVERNER_REQUEST}_${user._id}`,
+      metadata: `${MemoType.GOVERNOR_REQUEST}_${user._id}`,
       amount: GOVERNOR_REQUEST_FEE,
     };
 
@@ -42,4 +43,17 @@ const applyForGovernor = async (req, res) => {
   }
 };
 
-module.exports = { applyForGovernor };
+const listGovernors = async (req, res) => {
+  try {
+    const governors = await User.find(
+      { type: UserType.GOVERNOR },
+      "-nonce -usernameChanged"
+    ).sort("field -totalVotes");
+
+    return res.json(governors);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+
+module.exports = { applyForGovernor, listGovernors };

@@ -16,6 +16,7 @@ const pollRouter = require("./src/routes/poll");
 const userRouter = require("./src/routes/user");
 const authUserRouter = require("./src/routes/auth");
 const transactionRouter = require("./src/routes/transaction");
+const governorRouter = require("./src/routes/governor");
 
 app.enable("trust proxy");
 app.use(cors());
@@ -25,6 +26,7 @@ app.use("/api/v1/auth", authUserRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/polls", pollRouter);
 app.use("/api/v1/transactions", transactionRouter);
+app.use("/api/v1/governors", governorRouter);
 app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 module.exports = app;

@@ -11,7 +11,8 @@ const isAdminAccount = async (req, res, next) => {
       return res.status(404).json({
         errors: [
           {
-            msg: "User validation failed: User associated with `accountNumber` does not exist..",
+            message:
+              "User validation failed: User associated with `accountNumber` does not exist..",
             param: "accountNumber",
             location: "body",
           },
@@ -24,7 +25,7 @@ const isAdminAccount = async (req, res, next) => {
     return res.json({
       errors: [
         {
-          msg: "accountNumber is not in the whiltelist..",
+          message: "accountNumber is not in the whiltelist..",
           param: "accountNumber",
           location: "body",
         },
@@ -40,7 +41,8 @@ const userExists = async (req, res, next) => {
     return res.status(404).json({
       errors: [
         {
-          msg: "User validation failed: User associated with `accountNumber` does not exist..",
+          message:
+            "User validation failed: User associated with `accountNumber` does not exist..",
           param: "accountNumber",
           location: "body",
         },
@@ -56,11 +58,11 @@ const canChangeUsername = async (req, res, next) => {
 
   if (user.type != UserType.GOVERNOR) {
     return res.status(403).json({
-      msg: "user type GOVERNOR is required to change the username.",
+      message: "user type GOVERNOR is required to change the username.",
     });
   } else if (user.usernameChanged) {
     return res.status(403).json({
-      msg: "Username can only be changed once.",
+      message: "Username can only be changed once.",
     });
   }
   next();
@@ -71,7 +73,7 @@ const usernameExists = async (req, res, next) => {
   const user = await User.findOne({ username });
   if (user) {
     return res.status(409).json({
-      msg: "Username is already taken.",
+      message: "Username is already taken.",
     });
   }
   next();
@@ -80,14 +82,14 @@ const usernameExists = async (req, res, next) => {
 const isCandidateGovernor = async (req, res, next) => {
   const userID = req.params.id;
 
-  const userIsGoverner = await User.find({
+  const userIsGovernor = await User.find({
     type: UserType.GOVERNOR,
     _id: userID,
   });
 
-  if (userIsGoverner.length === 0) {
+  if (userIsGovernor.length === 0) {
     return res.status(403).json({
-      msg: "the user is not GOVERNOR and cannot be voted.",
+      message: "the user is not GOVERNOR and cannot be voted.",
     });
   }
   next();

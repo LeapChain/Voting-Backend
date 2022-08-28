@@ -1,6 +1,5 @@
 const User = require("../models/User");
 const getOrCreateUser = require("../utils/getOrCreateUser");
-const { UserType } = require("../constants");
 
 const createUser = async (req, res) => {
   /*  #swagger.parameters['body'] = {
@@ -43,17 +42,4 @@ const changeUsername = async (req, res) => {
   }
 };
 
-const listGoverners = async (req, res) => {
-  try {
-    const governors = await User.find(
-      { type: UserType.GOVERNOR },
-      "-nonce -usernameChanged"
-    );
-
-    return res.json(governors);
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-};
-
-module.exports = { createUser, changeUsername, listGoverners };
+module.exports = { createUser, changeUsername };

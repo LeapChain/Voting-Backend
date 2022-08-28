@@ -76,7 +76,7 @@ describe("POST /api/v1/auth", () => {
     );
   });
 
-  it("should return 400 bad request if invalid signature", async () => {
+  it("should return 401 if invalid signature", async () => {
     await getOrCreateUser(publicKey);
     const res = await request(app)
       .post("/api/v1/auth")
@@ -91,16 +91,10 @@ describe("POST /api/v1/auth", () => {
       .set("Accept", "application/json");
 
     expect(res.statusCode).toEqual(401);
-    expect(res.body).toHaveProperty("errors");
     expect(res.body).toEqual(
       expect.objectContaining({
-        errors: expect.arrayContaining([
-          expect.objectContaining({
-            msg: "Signature validation failed: Please sign the message with correct private key..",
-            param: "signature",
-            location: "body",
-          }),
-        ]),
+        message:
+          "Signature validation failed: Please sign the message with correct private key..",
       })
     );
   });
