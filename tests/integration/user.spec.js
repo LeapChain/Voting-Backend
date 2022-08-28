@@ -190,7 +190,7 @@ describe("POST /api/v1/users/apply", () => {
       expect.objectContaining({
         paymentInfo: expect.objectContaining({
           accountNumber: TREASURY_ACCOUNT_NUMBER,
-          metadata: `${MemoType.GOVERNER_REQUEST}_${userId}`,
+          metadata: `${MemoType.GOVERNOR_REQUEST}_${userId}`,
           amount: GOVERNOR_REQUEST_FEE,
         }),
       })

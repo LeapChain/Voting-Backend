@@ -30,7 +30,7 @@ const applyForGovernor = async (req, res) => {
 
     paymentInfo = {
       accountNumber: TREASURY_ACCOUNT_NUMBER,
-      metadata: `${MemoType.GOVERNER_REQUEST}_${user._id}`,
+      metadata: `${MemoType.GOVERNOR_REQUEST}_${user._id}`,
       amount: GOVERNOR_REQUEST_FEE,
     };
 
@@ -43,7 +43,7 @@ const applyForGovernor = async (req, res) => {
   }
 };
 
-const listGoverners = async (req, res) => {
+const listGovernors = async (req, res) => {
   try {
     const governors = await User.find(
       { type: UserType.GOVERNOR },
@@ -56,4 +56,4 @@ const listGoverners = async (req, res) => {
   }
 };
 
-module.exports = { applyForGovernor, listGoverners };
+module.exports = { applyForGovernor, listGovernors };

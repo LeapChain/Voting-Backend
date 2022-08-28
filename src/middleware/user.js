@@ -82,12 +82,12 @@ const usernameExists = async (req, res, next) => {
 const isCandidateGovernor = async (req, res, next) => {
   const userID = req.params.id;
 
-  const userIsGoverner = await User.find({
+  const userIsGovernor = await User.find({
     type: UserType.GOVERNOR,
     _id: userID,
   });
 
-  if (userIsGoverner.length === 0) {
+  if (userIsGovernor.length === 0) {
     return res.status(403).json({
       message: "the user is not GOVERNOR and cannot be voted.",
     });

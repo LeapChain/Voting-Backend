@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { listGoverners } = require("../controllers/governor");
+const { listGovernors } = require("../controllers/governor");
 const { createUserVote, cancelUserVote } = require("../controllers/vote");
 const { applyForGovernor } = require("../controllers/governor");
 
@@ -14,7 +14,7 @@ const { userExists, isCandidateGovernor } = require("../middleware/user");
 
 const { userVoteSchema } = require("../schema/voteSchema");
 
-router.get("/", listGoverners);
+router.get("/", listGovernors);
 
 router.post("/apply", auth, applyForGovernor);
 

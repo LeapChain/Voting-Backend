@@ -318,7 +318,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "allow users to vote for governers...",
+            "description": "allow users to vote for governors...",
             "required": true,
             "schema": {
               "$ref": "#/definitions/userVote"
@@ -360,7 +360,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "allow users to cancel their vote for governers...",
+            "description": "allow users to cancel their vote for governors...",
             "required": true,
             "schema": {
               "$ref": "#/definitions/userVote"

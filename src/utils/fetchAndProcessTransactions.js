@@ -82,7 +82,7 @@ const processTransactions = async () => {
     const parsedMetadata = confirmedTransaction.metadata.split("_");
 
     if (
-      parsedMetadata[0] == MemoType.GOVERNER_REQUEST &&
+      parsedMetadata[0] == MemoType.GOVERNOR_REQUEST &&
       parsedMetadata.length >= 2
     ) {
       const userId = parsedMetadata[1];
