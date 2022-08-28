@@ -54,7 +54,7 @@ const createPoll = async (req, res) => {
       signature,
     });
 
-    const user = await User.findOne({ accountNumber });
+    user = req.user;
     user.nonce = generateNonce();
     user.save();
 
