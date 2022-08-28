@@ -75,7 +75,7 @@ const generateGovernorWithDuplicateUsernameJWT = async () => {
 describe("POST /api/v1/users/create", () => {
   it("should return account number and nonce for valid request", async () => {
     const res = await request(app)
-      .post("/api/v1/users/create")
+      .post("/api/v1/users")
       .send({
         accountNumber: publicKey,
       })
@@ -87,7 +87,7 @@ describe("POST /api/v1/users/create", () => {
 
   it("should return 400 bad request if account number invalid", async () => {
     const res = await request(app)
-      .post("/api/v1/users/create")
+      .post("/api/v1/users")
       .send({
         accountNumber: "invalidAccountNumber",
       })
@@ -198,10 +198,10 @@ describe("POST /api/v1/users/apply", () => {
   });
 });
 
-describe("POST /api/v1/users/change-username", () => {
+describe("PATCH /api/v1/users", () => {
   it("should check if the no authorization token passed", async () => {
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send()
       .set("Accept", "application/json");
     expect(res.statusCode).toEqual(401);
@@ -215,7 +215,7 @@ describe("POST /api/v1/users/change-username", () => {
 
   it("should return 401 if invalid JWT token passed", async () => {
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send()
       .set("Accept", "application/json")
       .set("Authorization", "Bearer JWT");
@@ -230,7 +230,7 @@ describe("POST /api/v1/users/change-username", () => {
   it("should return 404 if user matching JWT not found", async () => {
     const { accessToken } = await generateBlankJWT();
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send({
         username: "testuser",
       })
@@ -249,7 +249,7 @@ describe("POST /api/v1/users/change-username", () => {
   it("should return 400 if username length is invalid", async () => {
     const { accessToken } = await generateUserJWT();
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send({
         username: "a",
       })
@@ -273,7 +273,7 @@ describe("POST /api/v1/users/change-username", () => {
   it("should return 400 if username contains invalid characters", async () => {
     const { accessToken } = await generateUserJWT();
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send({
         username: "a!@#",
       })
@@ -298,7 +298,7 @@ describe("POST /api/v1/users/change-username", () => {
     const { accessToken } = await generateGovernorWithDuplicateUsernameJWT();
 
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send({
         username: "duplicateUsername",
       })
@@ -317,7 +317,7 @@ describe("POST /api/v1/users/change-username", () => {
     const { accessToken } = await generateUserJWT();
 
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send({
         username: "testuser1",
       })
@@ -336,7 +336,7 @@ describe("POST /api/v1/users/change-username", () => {
     const { accessToken } = await generateGovernorWithChangedUsernameJWT();
 
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send({ username: "testuser1" })
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${accessToken}`);
@@ -350,7 +350,7 @@ describe("POST /api/v1/users/change-username", () => {
   it("should return 200 for a valid request", async () => {
     const { accessToken } = await generateGovernorJWT();
     const res = await request(app)
-      .post("/api/v1/users/change-username")
+      .patch("/api/v1/users")
       .send({ username: "testuser1" })
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${accessToken}`);
