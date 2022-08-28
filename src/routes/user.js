@@ -14,10 +14,10 @@ const {
   changeUsernameSchema,
 } = require("../schema/userSchema");
 
-router.post("/create", userCreateSchema, validateRequestSchema, createUser);
+router.post("/", userCreateSchema, validateRequestSchema, createUser);
 
-router.post(
-  "/change-username",
+router.patch(
+  "/",
   auth,
   changeUsernameSchema,
   validateRequestSchema,

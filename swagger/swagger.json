@@ -52,7 +52,7 @@
         }
       }
     },
-    "/api/v1/users/create": {
+    "/api/v1/users/": {
       "post": {
         "description": "",
         "parameters": [
@@ -77,10 +77,8 @@
             "description": "Internal Server Error"
           }
         }
-      }
-    },
-    "/api/v1/users/change-username": {
-      "post": {
+      },
+      "patch": {
         "description": "",
         "parameters": [
           {
