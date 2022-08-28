@@ -48,7 +48,7 @@ const createPollVote = async (req, res) => {
       return res.status(400).json({
         errors: [
           {
-            msg: "The poll is not active anymore to cast the votes..",
+            message: "The poll is not active anymore to cast the votes..",
             param: "id",
             location: "param",
           },
@@ -79,7 +79,8 @@ const createUserVote = async (req, res) => {
 
     if (totalVotesByUser > MAX_GOVERNANCE_VOTE_PER_ACCOUNT) {
       return res.status(403).json({
-        msg: "You can not vote more than three times. Please unvote to vote again..",
+        message:
+          "You can not vote more than three times. Please unvote to vote again..",
       });
     } else {
       const vote = await Vote.findOneAndUpdate(

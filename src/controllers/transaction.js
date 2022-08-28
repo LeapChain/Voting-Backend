@@ -10,7 +10,7 @@ const scanTransaction = async (req, res) => {
     fetchTransactions(TREASURY_ACCOUNT_NUMBER);
     updateConfirmationStatus();
     processTransactions();
-    return res.json({ msg: "chain scan completed;" });
+    return res.json({ message: "chain scan completed;" });
   } catch (error) {
     console.error(error);
   }

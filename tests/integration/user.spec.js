@@ -99,7 +99,7 @@ describe("POST /api/v1/users/create", () => {
       expect.objectContaining({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            msg: "accountNumber must be 64 character long..",
+            message: "accountNumber must be 64 character long..",
             param: "accountNumber",
             location: "body",
           }),
@@ -118,7 +118,8 @@ describe("POST /api/v1/users/apply", () => {
     expect(res.statusCode).toEqual(401);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
+        message:
+          "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
       })
     );
   });
@@ -132,7 +133,7 @@ describe("POST /api/v1/users/apply", () => {
     expect(res.statusCode).toEqual(401);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "Authentication Failed: Invalid access token.",
+        message: "Authentication Failed: Invalid access token.",
       })
     );
   });
@@ -150,7 +151,8 @@ describe("POST /api/v1/users/apply", () => {
     expect(res.statusCode).toEqual(404);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "User validation failed: User associated with that JWT does not exist.",
+        message:
+          "User validation failed: User associated with that JWT does not exist.",
       })
     );
   });
@@ -167,7 +169,7 @@ describe("POST /api/v1/users/apply", () => {
     expect(res.statusCode).toEqual(403);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "user with type governor can not apply to be a governor",
+        message: "user with type governor can not apply to be a governor",
       })
     );
   });
@@ -205,7 +207,8 @@ describe("POST /api/v1/users/change-username", () => {
     expect(res.statusCode).toEqual(401);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
+        message:
+          "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
       })
     );
   });
@@ -219,7 +222,7 @@ describe("POST /api/v1/users/change-username", () => {
     expect(res.statusCode).toEqual(401);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "Authentication Failed: Invalid access token.",
+        message: "Authentication Failed: Invalid access token.",
       })
     );
   });
@@ -237,7 +240,8 @@ describe("POST /api/v1/users/change-username", () => {
     expect(res.statusCode).toEqual(404);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "User validation failed: User associated with that JWT does not exist.",
+        message:
+          "User validation failed: User associated with that JWT does not exist.",
       })
     );
   });
@@ -257,7 +261,7 @@ describe("POST /api/v1/users/change-username", () => {
       expect.objectContaining({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            msg: "username must be between 3-32 character long.",
+            message: "username must be between 3-32 character long.",
             param: "username",
             location: "body",
           }),
@@ -281,7 +285,7 @@ describe("POST /api/v1/users/change-username", () => {
       expect.objectContaining({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            msg: "username can only contain alphanumeric and - characters.",
+            message: "username can only contain alphanumeric and - characters.",
             param: "username",
             location: "body",
           }),
@@ -304,7 +308,7 @@ describe("POST /api/v1/users/change-username", () => {
     expect(res.statusCode).toEqual(409);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "Username is already taken.",
+        message: "Username is already taken.",
       })
     );
   });
@@ -323,7 +327,7 @@ describe("POST /api/v1/users/change-username", () => {
     expect(res.statusCode).toEqual(403);
     expect(res.body).toEqual(
       expect.objectContaining({
-        msg: "user type GOVERNOR is required to change the username.",
+        message: "user type GOVERNOR is required to change the username.",
       })
     );
   });
@@ -339,7 +343,7 @@ describe("POST /api/v1/users/change-username", () => {
 
     expect(res.statusCode).toEqual(403);
     expect(res.body).toEqual(
-      expect.objectContaining({ msg: "Username can only be changed once." })
+      expect.objectContaining({ message: "Username can only be changed once." })
     );
   });
 

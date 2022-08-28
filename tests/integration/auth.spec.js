@@ -57,17 +57,17 @@ describe("POST /api/v1/auth", () => {
       expect.objectContaining({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            msg: "accountNumber must be 64 character long..",
+            message: "accountNumber must be 64 character long..",
             param: "accountNumber",
             location: "body",
           }),
           expect.objectContaining({
-            msg: "signature must be 128 character long..",
+            message: "signature must be 128 character long..",
             param: "signature",
             location: "body",
           }),
           expect.objectContaining({
-            msg: "message.nonce field is required",
+            message: "message.nonce field is required",
             param: "message.nonce",
             location: "body",
           }),
@@ -96,7 +96,8 @@ describe("POST /api/v1/auth", () => {
       expect.objectContaining({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            msg: "Signature validation failed: Please sign the message with correct private key..",
+            message:
+              "Signature validation failed: Please sign the message with correct private key..",
             param: "signature",
             location: "body",
           }),

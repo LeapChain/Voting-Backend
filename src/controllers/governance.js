@@ -13,7 +13,7 @@ const applyForGovernor = async (req, res) => {
 
     if (user.type === UserType.GOVERNOR) {
       return res.status(403).json({
-        msg: "user with type governor can not apply to be a governor",
+        message: "user with type governor can not apply to be a governor",
       });
     }
 
