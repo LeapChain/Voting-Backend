@@ -26,6 +26,7 @@ router.post(
   "/",
   PollSchema,
   validateRequestSchema,
+  userExists,
   validateSignature,
   isOnGovernance,
   createPoll
@@ -41,6 +42,7 @@ router.post(
   validateRequestSchema,
   userExists,
   validateSignature,
+  isOnGovernance,
   createPollVote
 );
 
