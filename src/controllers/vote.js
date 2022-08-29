@@ -2,7 +2,7 @@ const Vote = require("../models/Vote");
 const Poll = require("../models/Poll");
 
 const generateNonce = require("../utils/generateNonce");
-const { syncUserVotes } = require("../utils/syncVote");
+const { syncUserVotes, syncPollVotes } = require("../utils/syncVote");
 
 const { MAX_GOVERNANCE_VOTE_PER_ACCOUNT, VoteType } = require("../constants");
 
@@ -18,13 +18,16 @@ const createPollVote = async (req, res) => {
     const { nonce, choices } = req.body.message;
     const pollID = req.params.id;
 
-    const isActivePoll = await Poll.exists({ status: 0, _id: pollID });
+    const poll = await Poll.findOne({ status: 0, _id: pollID });
 
-    if (isActivePoll) {
-      const vote = await Vote.findOneAndUpdate(
-        { accountNumber: accountNumber, poll: pollID },
-        {
-          $setOnInsert: {
+    if (poll) {
+      const choiceExists = poll.choices.find((choice) => {
+        return choices === choice._id.toString();
+      });
+      if (choiceExists) {
+        const vote = await Vote.findOneAndUpdate(
+          { accountNumber: accountNumber, poll: pollID },
+          {
             accountNumber,
             signature,
             nonce,
@@ -32,15 +35,21 @@ const createPollVote = async (req, res) => {
             choices,
             type: VoteType.POLL,
           },
-        },
-        { upsert: true, new: true }
-      );
+          { upsert: true, new: true }
+        );
 
-      user = req.user;
-      user.nonce = generateNonce();
-      user.save();
+        syncPollVotes();
 
-      return res.json(vote);
+        user = req.user;
+        user.nonce = generateNonce();
+        user.save();
+
+        return res.json(vote);
+      } else {
+        return res.status(400).json({
+          message: "Invalid choice",
+        });
+      }
     } else {
       return res.status(403).json({
         message: "poll not eligible to vote on",
