@@ -19,7 +19,9 @@ const transactionRouter = require("./src/routes/transaction");
 const governorRouter = require("./src/routes/governor");
 const cronJobs = require("./src/utils/cronJobs");
 
-cronJobs.initCronJobs();
+if (process.env.NODE_ENV !== "test") {
+  cronJobs.initCronJobs();
+}
 
 app.enable("trust proxy");
 app.use(cors());
