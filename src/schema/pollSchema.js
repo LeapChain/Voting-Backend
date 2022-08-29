@@ -25,7 +25,7 @@ const PollSchema = [
     checkFalsy: true,
     checkNull: true,
   }),
-  body("message.choices", "message.title field is required").exists({
+  body("message.choices", "message.choices field is required").exists({
     checkFalsy: true,
     checkNull: true,
   }),
