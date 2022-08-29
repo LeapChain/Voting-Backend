@@ -17,6 +17,9 @@ const userRouter = require("./src/routes/user");
 const authUserRouter = require("./src/routes/auth");
 const transactionRouter = require("./src/routes/transaction");
 const governorRouter = require("./src/routes/governor");
+const cronJobs = require("./src/utils/cronJobs");
+
+cronJobs.initCronJobs();
 
 app.enable("trust proxy");
 app.use(cors());

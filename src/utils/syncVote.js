@@ -1,7 +1,7 @@
 const Vote = require("../models/Vote");
 const User = require("../models/User");
 const Poll = require("../models/Poll");
-const { VoteType, UserType } = require("../constants");
+const { VoteType, UserType, POLL_DURATION } = require("../constants");
 const { default: axios } = require("axios");
 const {
   LEAPCHAIN_BALANCE_API_URL,
@@ -88,6 +88,18 @@ const syncPollVotes = async () => {
       choice_subdoc.totalVotes = totalVotes;
     }
 
+    const pollCreatedAt = new Date(poll.createdAt);
+    const pollExpiresAt = new Date(
+      pollCreatedAt.setDate(pollCreatedAt.getDate() + POLL_DURATION)
+    );
+
+    var pollStatus = PollStatus.IN_PROGRESS;
+
+    if (new Date() > pollExpiresAt) {
+      pollStatus = PollStatus.COMPLETED;
+    }
+
+    poll.status = pollStatus;
     poll.voteWeightage = Object.keys(pollVotes).length;
     poll.save();
   }
