@@ -1,8 +1,13 @@
 const Vote = require("../models/Vote");
 const User = require("../models/User");
+const Poll = require("../models/Poll");
 const { VoteType, UserType } = require("../constants");
 const { default: axios } = require("axios");
-const { LEAPCHAIN_BALANCE_API_URL } = require("../constants");
+const {
+  LEAPCHAIN_BALANCE_API_URL,
+  PollStatus,
+  GOVERNANCE_SIZE,
+} = require("../constants");
 
 const fetchAccountBalances = async () => {
   const accountBalances = await axios.get(LEAPCHAIN_BALANCE_API_URL);
@@ -48,4 +53,44 @@ const syncUserVotes = async () => {
   }
 };
 
-module.exports = { syncUserVotes };
+const syncPollVotes = async () => {
+  const activePolls = await Poll.find({ status: PollStatus.IN_PROGRESS });
+  const governors = await User.find({ type: UserType.GOVERNOR })
+    .sort("field -totalVotes")
+    .limit(GOVERNANCE_SIZE)
+    .lean();
+
+  for (const poll of activePolls) {
+    var pollVotes = {};
+    const votes = await Vote.find({ poll: poll._id });
+
+    for (const vote of votes) {
+      if (
+        governors.some(
+          (governor) => governor.accountNumber === vote.accountNumber
+        )
+      ) {
+        if (vote.choices in pollVotes) {
+          pollVotes[vote.choices] += 1;
+        } else {
+          pollVotes[vote.choices] = 1;
+        }
+      }
+    }
+
+    for (const choice of poll.choices) {
+      const totalVotes =
+        typeof pollVotes[choice._id.toString()] === "undefined"
+          ? 0
+          : pollVotes[choice._id.toString()];
+
+      choice_subdoc = poll.choices.id(choice._id.toString());
+      choice_subdoc.totalVotes = totalVotes;
+    }
+
+    poll.voteWeightage = Object.keys(pollVotes).length;
+    poll.save();
+  }
+};
+
+module.exports = { syncUserVotes, syncPollVotes };
