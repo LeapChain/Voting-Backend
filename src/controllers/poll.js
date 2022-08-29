@@ -1,3 +1,4 @@
+const { matchedData } = require("express-validator");
 const Poll = require("../models/Poll");
 const Vote = require("../models/Vote");
 const User = require("../models/User");
@@ -41,8 +42,9 @@ const createPoll = async (req, res) => {
         schema: { $ref: "#/definitions/Poll" }
     } */
   try {
-    const { accountNumber, signature } = req.body;
-    const { title, description, url, nonce, choices } = req.body.message;
+    const body = matchedData(req, { locations: ["body"] });
+    const { accountNumber, signature } = body;
+    const { title, description, url, nonce, choices } = body.message;
 
     const poll = await Poll.create({
       accountNumber,
