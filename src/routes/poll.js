@@ -12,12 +12,7 @@ const {
 } = require("../middleware/validateRequestSchema");
 const { validateSignature } = require("../middleware/validateSignature");
 
-const {
-  getAllPoll,
-  getPoll,
-  createPoll,
-  updatePoll,
-} = require("../controllers/poll");
+const { getAllPoll, getPoll, createPoll } = require("../controllers/poll");
 const { createPollVote } = require("../controllers/vote");
 
 router.get("/", getAllPoll);
@@ -33,8 +28,6 @@ router.post(
 );
 
 router.get("/:id", getPoll);
-
-router.patch("/:id", isAdminAccount, updatePoll);
 
 router.post(
   "/:id/vote",
