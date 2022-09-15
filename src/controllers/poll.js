@@ -66,75 +66,8 @@ const createPoll = async (req, res) => {
   }
 };
 
-const updatePoll = async (req, res) => {
-  // #swagger.ignore = true
-  try {
-    const { id } = req.params;
-    const { voteWeightage, choices, status } = req.body;
-
-    const sortedChoices = req.body.choices.sort((a, b) =>
-      a._id > b._id ? 1 : -1
-    );
-
-    user = req.user;
-
-    const message = {
-      choices: sortedChoices,
-      nonce: user.nonce,
-      status: status,
-      voteWeightage: voteWeightage,
-    };
-
-    const stringifiedMessage = JSON.stringify(message);
-
-    const isValidSignature = verifySignature(
-      req.body.signature,
-      stringifiedMessage,
-      req.body.accountNumber
-    );
-
-    if (isValidSignature) {
-      const newPoll = await Poll.findOneAndUpdate(
-        { _id: id },
-        { voteWeightage: voteWeightage, status: status },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
-
-      for (const choice of choices) {
-        choice_subdoc = newPoll.choices.id(choice["_id"]);
-        if (choice_subdoc) {
-          choice_subdoc.totalVotes = choice["totalVotes"];
-        }
-      }
-      newPoll.save();
-      return res.json(newPoll);
-    } else {
-      return res.json({
-        error: "Invalid Signature..",
-      });
-    }
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-};
-
-const deletePoll = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const poll = await Poll.findById(id);
-    return res.json(poll);
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-};
-
 module.exports = {
   getAllPoll,
   getPoll,
   createPoll,
-  deletePoll,
-  updatePoll,
 };
