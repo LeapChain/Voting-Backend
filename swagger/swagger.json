@@ -8,8 +8,7 @@
   "host": "",
   "basePath": "/",
   "schemes": [
-    "http",
-    "https"
+    "http"
   ],
   "securityDefinitions": {
     "jwt": {
