@@ -132,8 +132,5 @@ dist
 # IDEA FOLDERS
 .idea/*
 
-# DETA FOLDERS
-.deta/*
-
 # Python
 __pycache__/
