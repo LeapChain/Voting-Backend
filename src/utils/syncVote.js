@@ -3,14 +3,10 @@ const User = require("../models/User");
 const Poll = require("../models/Poll");
 const { VoteType, UserType, POLL_DURATION } = require("../constants");
 const { default: axios } = require("axios");
-const {
-  LEAPCHAIN_BALANCE_API_URL,
-  PollStatus,
-  GOVERNANCE_SIZE,
-} = require("../constants");
+const { PollStatus, GOVERNANCE_SIZE } = require("../constants");
 
 const fetchAccountBalances = async () => {
-  const accountBalances = await axios.get(LEAPCHAIN_BALANCE_API_URL);
+  const accountBalances = await axios.get(process.env.ACCOUNT_BALANCE_URL);
   return accountBalances.data;
 };
 
