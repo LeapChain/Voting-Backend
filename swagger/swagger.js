@@ -1,12 +1,21 @@
 const swaggerAutogen = require("swagger-autogen")();
 
+if (
+  process.env.NODE_ENV === "staging" ||
+  process.env.NODE_ENV === "production"
+) {
+  var httpScheme = ["https"];
+} else {
+  var httpScheme = ["http"];
+}
+
 const doc = {
   info: {
     title: "Leapchain Voting API",
     description: "API documentation of Leapchain.",
   },
   host: "",
-  schemes: ["http", "https"],
+  schemes: httpScheme,
   securityDefinitions: {
     jwt: {
       type: "apiKey",
