@@ -41,9 +41,6 @@ const PaymentStatus = {
   CANCELLED: "CANCELLED",
 };
 
-const LEAPCHAIN_BALANCE_API_URL =
-  "https://raw.githubusercontent.com/LeapChain/Account-Backups/master/latest_backup/latest.json";
-
 const GOVERNANCE_SIZE = 3;
 const POLL_DURATION = 3;
 
@@ -58,7 +55,6 @@ module.exports = {
   PaymentStatus,
   MemoType,
   JWT_SECRET_KEY,
-  LEAPCHAIN_BALANCE_API_URL,
   GOVERNANCE_SIZE,
   POLL_DURATION,
 };
