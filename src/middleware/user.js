@@ -1,5 +1,9 @@
 const User = require("../models/User");
-const { WHITELISTEAD_POLL_ACCOUNT_NUMBERS, UserType } = require("../constants");
+const {
+  WHITELISTEAD_POLL_ACCOUNT_NUMBERS,
+  UserType,
+  GOVERNANCE_SIZE,
+} = require("../constants");
 
 const isAdminAccount = async (req, res, next) => {
   const { accountNumber } = req.body;
@@ -11,7 +15,8 @@ const isAdminAccount = async (req, res, next) => {
       return res.status(404).json({
         errors: [
           {
-            msg: "User validation failed: User associated with `accountNumber` does not exist..",
+            message:
+              "User validation failed: User associated with `accountNumber` does not exist..",
             param: "accountNumber",
             location: "body",
           },
@@ -24,7 +29,7 @@ const isAdminAccount = async (req, res, next) => {
     return res.json({
       errors: [
         {
-          msg: "accountNumber is not in the whiltelist..",
+          message: "accountNumber is not in the whiltelist..",
           param: "accountNumber",
           location: "body",
         },
@@ -40,7 +45,8 @@ const userExists = async (req, res, next) => {
     return res.status(404).json({
       errors: [
         {
-          msg: "User validation failed: User associated with `accountNumber` does not exist..",
+          message:
+            "User validation failed: User associated with `accountNumber` does not exist..",
           param: "accountNumber",
           location: "body",
         },
@@ -54,13 +60,13 @@ const userExists = async (req, res, next) => {
 const canChangeUsername = async (req, res, next) => {
   user = req.user;
 
-  if (user.type != UserType.GOVERNER) {
+  if (user.type != UserType.GOVERNOR) {
     return res.status(403).json({
-      msg: "user type GOVERNOR is required to change the username.",
+      message: "user type GOVERNOR is required to change the username.",
     });
   } else if (user.usernameChanged) {
     return res.status(403).json({
-      msg: "Username can only be changed once.",
+      message: "Username can only be changed once.",
     });
   }
   next();
@@ -71,9 +77,42 @@ const usernameExists = async (req, res, next) => {
   const user = await User.findOne({ username });
   if (user) {
     return res.status(409).json({
-      msg: "Username is already taken.",
+      message: "Username is already taken.",
     });
   }
+  next();
+};
+
+const isCandidateGovernor = async (req, res, next) => {
+  const userID = req.params.id;
+
+  const userIsGovernor = await User.find({
+    type: UserType.GOVERNOR,
+    _id: userID,
+  });
+
+  if (userIsGovernor.length === 0) {
+    return res.status(403).json({
+      message: "the user is not GOVERNOR and cannot be voted.",
+    });
+  }
+  next();
+};
+
+const isOnGovernance = async (req, res, next) => {
+  const { accountNumber } = req.body;
+
+  const governors = await User.find({ type: UserType.GOVERNOR })
+    .sort("field -totalVotes")
+    .limit(GOVERNANCE_SIZE)
+    .lean();
+
+  if (!governors.some((governor) => governor.accountNumber === accountNumber)) {
+    return res.status(403).json({
+      message: "User is not on governance.",
+    });
+  }
+
   next();
 };
 
@@ -82,4 +121,6 @@ module.exports = {
   userExists,
   canChangeUsername,
   usernameExists,
+  isCandidateGovernor,
+  isOnGovernance,
 };

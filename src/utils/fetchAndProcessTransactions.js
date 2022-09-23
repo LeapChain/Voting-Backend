@@ -82,7 +82,7 @@ const processTransactions = async () => {
     const parsedMetadata = confirmedTransaction.metadata.split("_");
 
     if (
-      parsedMetadata[0] == MemoType.GOVERNER_REQUEST &&
+      parsedMetadata[0] == MemoType.GOVERNOR_REQUEST &&
       parsedMetadata.length >= 2
     ) {
       const userId = parsedMetadata[1];
@@ -91,7 +91,7 @@ const processTransactions = async () => {
 
       if (user) {
         if (confirmedTransaction.amount >= GOVERNOR_REQUEST_FEE) {
-          await User.updateOne({ _id: userId }, { type: UserType.GOVERNER });
+          await User.updateOne({ _id: userId }, { type: UserType.GOVERNOR });
 
           const governorRequest = await GovernorRequest.findOne({
             accountNumber: user.accountNumber,

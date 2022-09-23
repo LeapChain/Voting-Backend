@@ -1,14 +1,10 @@
 const Vote = require("../models/Vote");
 const Poll = require("../models/Poll");
-const User = require("../models/User");
 
 const generateNonce = require("../utils/generateNonce");
+const { syncUserVotes, syncPollVotes } = require("../utils/syncVote");
 
-const {
-  MAX_GOVERNANCE_VOTE_PER_ACCOUNT,
-  VoteType,
-  UserType,
-} = require("../constants");
+const { MAX_GOVERNANCE_VOTE_PER_ACCOUNT, VoteType } = require("../constants");
 
 const createPollVote = async (req, res) => {
   /*  #swagger.parameters['body'] = {
@@ -22,37 +18,41 @@ const createPollVote = async (req, res) => {
     const { nonce, choices } = req.body.message;
     const pollID = req.params.id;
 
-    const isActivePoll = await Poll.exists({ status: 0, _id: pollID });
+    const poll = await Poll.findOne({ status: 0, _id: pollID });
 
-    if (isActivePoll) {
-      Vote.deleteMany({
-        accountNumber: accountNumber,
-        poll: pollID,
+    if (poll) {
+      const choiceExists = poll.choices.find((choice) => {
+        return choices === choice._id.toString();
       });
-
-      const vote = await Vote.create({
-        accountNumber,
-        signature,
-        nonce,
-        poll: pollID,
-        choices,
-        type: VoteType.POLL,
-      });
-
-      user = req.user;
-      user.nonce = generateNonce();
-      user.save();
-
-      return res.json(vote);
-    } else {
-      return res.status(400).json({
-        errors: [
+      if (choiceExists) {
+        const vote = await Vote.findOneAndUpdate(
+          { accountNumber: accountNumber, poll: pollID },
           {
-            msg: "The poll is not active anymore to cast the votes..",
-            param: "id",
-            location: "param",
+            accountNumber,
+            signature,
+            nonce,
+            poll: pollID,
+            choices,
+            type: VoteType.POLL,
           },
-        ],
+          { upsert: true, new: true }
+        );
+
+        syncPollVotes();
+
+        user = req.user;
+        user.nonce = generateNonce();
+        user.save();
+
+        return res.json(vote);
+      } else {
+        return res.status(400).json({
+          message: "Invalid choice",
+        });
+      }
+    } else {
+      return res.status(403).json({
+        message: "poll not eligible to vote on",
       });
     }
   } catch (err) {
@@ -63,7 +63,7 @@ const createPollVote = async (req, res) => {
 const createUserVote = async (req, res) => {
   /*  #swagger.parameters['body'] = {
         in: 'body',
-        description: 'allow users to vote for governers...',
+        description: 'allow users to vote for governors...',
         required: true,
         schema: { $ref: "#/definitions/userVote" }
     } */
@@ -72,57 +72,38 @@ const createUserVote = async (req, res) => {
     const { nonce } = req.body.message;
     const userID = req.params.id;
 
-    const userCanBeVoted = await User.exists({
-      type: UserType.GOVERNER,
-      _id: userID,
+    const totalVotesByUser = await Vote.count({
+      type: VoteType.GOVERNANCE,
+      accountNumber,
     });
 
-    if (userCanBeVoted) {
-      const totalVotesByUser = await Vote.count({
-        type: VoteType.GOVERNANCE,
-        accountNumber,
+    if (totalVotesByUser > MAX_GOVERNANCE_VOTE_PER_ACCOUNT) {
+      return res.status(403).json({
+        message:
+          "You can not vote more than three times. Please unvote to vote again..",
       });
-
-      if (totalVotesByUser > MAX_GOVERNANCE_VOTE_PER_ACCOUNT) {
-        return res.status(400).json({
-          errors: [
-            {
-              msg: "You can not vote more than three times. Please unvote to vote again..",
-              param: "none",
-              location: "none",
-            },
-          ],
-        });
-      } else {
-        Vote.deleteMany({
-          accountNumber: accountNumber,
-          votedTo: userID,
-        });
-
-        const vote = await Vote.create({
-          accountNumber,
-          signature,
-          nonce,
-          votedTo: userID,
-          type: VoteType.GOVERNANCE,
-        });
-
-        user = req.user;
-        user.nonce = generateNonce();
-        user.save();
-
-        return res.json(vote);
-      }
     } else {
-      return res.json({
-        errors: [
-          {
-            msg: "The user is not eligible to be voted on..",
-            param: "id",
-            location: "param",
+      const vote = await Vote.findOneAndUpdate(
+        { accountNumber: accountNumber, votedTo: userID },
+        {
+          $setOnInsert: {
+            accountNumber,
+            signature,
+            nonce,
+            votedTo: userID,
+            type: VoteType.GOVERNANCE,
           },
-        ],
-      });
+        },
+        { upsert: true, new: true }
+      );
+
+      user = req.user;
+      user.nonce = generateNonce();
+      user.save();
+
+      syncUserVotes();
+
+      return res.json(vote);
     }
   } catch (err) {
     return res.status(500).json(err);
@@ -132,18 +113,17 @@ const createUserVote = async (req, res) => {
 const cancelUserVote = async (req, res) => {
   /*  #swagger.parameters['body'] = {
         in: 'body',
-        description: 'allow users to cancel their vote for governers...',
+        description: 'allow users to cancel their vote for governors...',
         required: true,
         schema: { $ref: "#/definitions/userVote" }
     } */
   try {
     const { accountNumber } = req.body;
     const userID = req.params.id;
-    Vote.deleteMany({
-      accountNumber: accountNumber,
-      votedTo: userID,
-    });
-    return res.status(200).json("Deleted the vote");
+
+    await Vote.deleteOne({ accountNumber: accountNumber, votedTo: userID });
+    syncUserVotes();
+    return res.json({ message: "Vote cancelled successfully.." });
   } catch (err) {
     return res.status(500).json(err);
   }

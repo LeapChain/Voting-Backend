@@ -8,7 +8,8 @@ const verifyToken = async (req, res, next) => {
 
   if (token == null) {
     return res.status(401).json({
-      msg: "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
+      message:
+        "Authentication Failed: Please include `Authorization: Bearer JWT` in your headers.",
     });
   }
 
@@ -17,14 +18,15 @@ const verifyToken = async (req, res, next) => {
     const user = await User.findById(payload._id);
     if (!user) {
       return res.status(404).json({
-        msg: "User validation failed: User associated with that JWT does not exist.",
+        message:
+          "User validation failed: User associated with that JWT does not exist.",
       });
     }
     req.user = user;
     next();
   } catch (err) {
     return res.status(401).json({
-      msg: "Authentication Failed: Invalid access token.",
+      message: "Authentication Failed: Invalid access token.",
     });
   }
 };
