@@ -13,7 +13,7 @@ const isAdminAccount = async (req, res, next) => {
 
     if (!user) {
       return res.status(404).json({
-        message: "User associated with `accountNumber` does not exist.",
+        message: "User associated with accountNumber does not exist.",
       });
     }
     req.user = user;
@@ -36,7 +36,7 @@ const userExists = async (req, res, next) => {
 
   if (!user) {
     return res.status(404).json({
-      message: "User associated with `accountNumber` does not exist.",
+      message: "User associated with accountNumber does not exist.",
     });
   }
   req.user = user;

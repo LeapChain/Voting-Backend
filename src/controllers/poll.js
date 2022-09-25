@@ -1,19 +1,19 @@
 const { matchedData } = require("express-validator");
 const Poll = require("../models/Poll");
 const Vote = require("../models/Vote");
-const User = require("../models/User");
 const generateNonce = require("../utils/generateNonce");
-const { verifySignature } = require("@leapchain/dleap");
 
 const getAllPoll = async (req, res) => {
   try {
-    var status = req.query.status;
-    if (!status) {
+    const status = req.query.status;
+
+    if (status) {
+      const polls = await Poll.find({ status }).lean();
+      return res.json(polls);
+    } else {
       const polls = await Poll.find().lean();
       return res.json(polls);
     }
-    const polls = await Poll.find({ status: status }).lean();
-    return res.json(polls);
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -22,12 +22,16 @@ const getAllPoll = async (req, res) => {
 const getPoll = async (req, res) => {
   try {
     const { id } = req.params;
-    const pollPromise = Poll.findById(id).lean();
+    const pollPromise = Poll.findOne({ _id: id }).lean();
     const votesPromise = Vote.find({ poll: id }).lean();
 
     const [poll, votes] = await Promise.all([pollPromise, votesPromise]);
-    poll.votes = votes;
 
+    if (!poll) {
+      return res.status(404).json({ message: "Poll not found." });
+    }
+
+    poll.votes = votes;
     return res.json(poll);
   } catch (err) {
     return res.status(500).json(err);
@@ -60,7 +64,7 @@ const createPoll = async (req, res) => {
     user.nonce = generateNonce();
     user.save();
 
-    return res.json(poll);
+    return res.status(201).json(poll);
   } catch (err) {
     return res.status(500).json(err);
   }
