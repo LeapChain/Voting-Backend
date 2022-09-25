@@ -1,6 +1,7 @@
-const { body } = require("express-validator");
+const ObjectId = require("mongoose").Types.ObjectId;
+const { body, param } = require("express-validator");
 
-const PollSchema = [
+const PollCreateSchema = [
   body("accountNumber", "accountNumber must be 64 character long..").isLength({
     min: 64,
     max: 64,
@@ -38,4 +39,10 @@ const PollSchema = [
   }),
 ];
 
-module.exports = { PollSchema };
+const PollGetSchema = [
+  param("id", "id must be a vaild ObjectId").custom((value) => {
+    return ObjectId.isValid(value);
+  }),
+];
+
+module.exports = { PollCreateSchema, PollGetSchema };

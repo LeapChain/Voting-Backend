@@ -13,14 +13,7 @@ const isAdminAccount = async (req, res, next) => {
 
     if (!user) {
       return res.status(404).json({
-        errors: [
-          {
-            message:
-              "User validation failed: User associated with `accountNumber` does not exist..",
-            param: "accountNumber",
-            location: "body",
-          },
-        ],
+        message: "User associated with accountNumber does not exist.",
       });
     }
     req.user = user;
@@ -43,14 +36,7 @@ const userExists = async (req, res, next) => {
 
   if (!user) {
     return res.status(404).json({
-      errors: [
-        {
-          message:
-            "User validation failed: User associated with `accountNumber` does not exist..",
-          param: "accountNumber",
-          location: "body",
-        },
-      ],
+      message: "User associated with accountNumber does not exist.",
     });
   }
   req.user = user;
