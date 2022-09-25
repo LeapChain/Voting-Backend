@@ -5,7 +5,7 @@ const {
   userExists,
   isOnGovernance,
 } = require("../middleware/user");
-const { PollSchema } = require("../schema/pollSchema");
+const { PollCreateSchema, PollGetSchema } = require("../schema/pollSchema");
 const { pollVoteSchema } = require("../schema/voteSchema");
 const {
   validateRequestSchema,
@@ -19,7 +19,7 @@ router.get("/", getAllPoll);
 
 router.post(
   "/",
-  PollSchema,
+  PollCreateSchema,
   validateRequestSchema,
   userExists,
   validateSignature,
@@ -27,7 +27,7 @@ router.post(
   createPoll
 );
 
-router.get("/:id", getPoll);
+router.get("/:id", PollGetSchema, validateRequestSchema, getPoll);
 
 router.post(
   "/:id/vote",
