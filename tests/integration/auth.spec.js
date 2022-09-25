@@ -93,8 +93,7 @@ describe("POST /api/v1/auth", () => {
     expect(res.statusCode).toEqual(401);
     expect(res.body).toEqual(
       expect.objectContaining({
-        message:
-          "Signature validation failed: Please sign the message with correct private key..",
+        message: "Invalid signature.",
       })
     );
   });
