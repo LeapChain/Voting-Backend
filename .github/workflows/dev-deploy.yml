@@ -1,9 +1,9 @@
-name: Deploy to deta once pushed to staging
+name: Deploy to deta once pushed to development
 
 on:
   push:
     branches:
-      - staging
+      - development
 
 env:
   MONGO_URI: ${{ secrets.STAGING_MONGO_URI }}
