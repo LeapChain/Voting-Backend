@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
-const { PollStatus } = require("../constants");
+const { PollStatus, POLL_DURATION } = require("../constants");
+
+const calculateExpirationDate = () => {
+  const now = new Date();
+  const expirationDate = now.setDate(now.getDate() + POLL_DURATION);
+  return expirationDate;
+};
 
 const PollChoiceSchema = mongoose.Schema({
   title: {
@@ -60,6 +66,7 @@ const PollSchema = mongoose.Schema(
         required: true,
       },
     ],
+    expiresAt: { type: Date, default: calculateExpirationDate() },
   },
   {
     timestamps: true,

@@ -84,14 +84,9 @@ const syncPollVotes = async () => {
       choice_subdoc.totalVotes = totalVotes;
     }
 
-    const pollCreatedAt = new Date(poll.createdAt);
-    const pollExpiresAt = new Date(
-      pollCreatedAt.setDate(pollCreatedAt.getDate() + POLL_DURATION)
-    );
-
     var pollStatus = PollStatus.IN_PROGRESS;
 
-    if (new Date() > pollExpiresAt) {
+    if (new Date() > poll.expiresAt) {
       pollStatus = PollStatus.COMPLETED;
     }
 
