@@ -23,8 +23,8 @@ router.post(
   userVoteSchema,
   validateRequestSchema,
   userExists,
-  validateSignature,
   isCandidateGovernor,
+  validateSignature,
   createUserVote
 );
 
