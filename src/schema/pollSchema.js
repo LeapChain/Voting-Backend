@@ -1,5 +1,5 @@
 const ObjectId = require("mongoose").Types.ObjectId;
-const { body, param } = require("express-validator");
+const { body, param, query } = require("express-validator");
 
 const PollCreateSchema = [
   body("accountNumber", "accountNumber must be 64 character long..").isLength({
@@ -45,4 +45,16 @@ const PollGetSchema = [
   }),
 ];
 
-module.exports = { PollCreateSchema, PollGetSchema };
+const PollGetAllSchema = [
+  query(
+    "status",
+    "status must be a vaild status; available choices are IN_PROGRESS: 0, COMPLETED: 1, CANCELLED: 2"
+  ).custom((value) => {
+    if (value) {
+      return value === "0" || value === "1" || value === "2";
+    }
+    return true;
+  }),
+];
+
+module.exports = { PollCreateSchema, PollGetSchema, PollGetAllSchema };

@@ -4,6 +4,10 @@ const Vote = require("../models/Vote");
 const generateNonce = require("../utils/generateNonce");
 
 const getAllPoll = async (req, res) => {
+  /*  #swagger.parameters['status'] = {
+            in: 'query',
+            description: 'IN_PROGRESS: 0, COMPLETED: 1, CANCELLED: 2'
+    } */
   try {
     const status = req.query.status;
 
