@@ -1,4 +1,5 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const pollVoteSchema = [
   body("accountNumber", "accountNumber must be 64 character long..").isLength({
@@ -20,6 +21,9 @@ const pollVoteSchema = [
 ];
 
 const userVoteSchema = [
+  param("id", "id must be a vaild ObjectId").custom((value) => {
+    return ObjectId.isValid(value);
+  }),
   body("accountNumber", "accountNumber must be 64 character long..").isLength({
     min: 64,
     max: 64,
