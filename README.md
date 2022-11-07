@@ -34,6 +34,14 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 Now navigate to `http://127.0.0.1:3000/` and the server should be running.
 
+### Run tests
+
+Install the packages
+`npm install`
+
+Run tests
+`npm run test`
+
 ### Deploy to deta
 
 [![Deploy](https://button.deta.dev/1/svg)](https://go.deta.dev/deploy?repo=https://github.com/LeapChain/Voting-Backend)
